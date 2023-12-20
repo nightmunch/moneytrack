@@ -25,36 +25,23 @@ export const MonthCalendar = ({
     "Nov",
     "Dec",
   ];
+  const updateDate = (yearOffset: number) => {
+    setDate(
+      date
+        ? new Date(date.getFullYear() + yearOffset, date.getMonth())
+        : new Date(currentYear + yearOffset, currentMonth),
+    );
+  };
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() =>
-            setDate(
-              date
-                ? new Date(date.getFullYear() - 1, date.getMonth())
-                : new Date(currentYear - 1, currentMonth),
-            )
-          }
-        >
+        <Button variant="ghost" size="icon-sm" onClick={() => updateDate(-1)}>
           <ChevronLeftIcon className="h-4 w-4" />
         </Button>
         <h1 className="text-sm font-semibold">
           {date ? date.getFullYear() : currentYear}
         </h1>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() =>
-            setDate(
-              date
-                ? new Date(date.getFullYear() + 1, date.getMonth())
-                : new Date(currentYear + 1, currentMonth),
-            )
-          }
-        >
+        <Button variant="ghost" size="icon-sm" onClick={() => updateDate(1)}>
           <ChevronRightIcon className="h-4 w-4" />
         </Button>
       </div>
