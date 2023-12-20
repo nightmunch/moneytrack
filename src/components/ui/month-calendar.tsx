@@ -32,6 +32,22 @@ export const MonthCalendar = ({
         : new Date(currentYear + yearOffset, currentMonth),
     );
   };
+  function getMonthVariant(
+    date: Date | undefined,
+    index: number,
+    currentMonth: number,
+    currentYear: number,
+  ): "default" | "accent" | "ghost" {
+    if (!date && index === currentMonth) {
+      return "accent";
+    } else if (date?.getMonth() === index) {
+      return "default";
+    } else if (index === currentMonth) {
+      return date?.getFullYear() === currentYear ? "accent" : "ghost";
+    } else {
+      return "ghost";
+    }
+  }
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
@@ -48,14 +64,7 @@ export const MonthCalendar = ({
       <div className="grid grid-cols-3 text-center">
         {months.map((month, index) => (
           <Button
-            variant={
-              // Set the variant based on the selected month and current month
-              date?.getMonth() == index
-                ? "default" // Use "default" variant if the month is selected
-                : index == currentMonth
-                  ? "accent" // Use "accent" variant if it's the current month
-                  : "ghost" // Use "ghost" variant for other months
-            }
+            variant={getMonthVariant(date, index, currentMonth, currentYear)}
             key={month}
             // if the current month is selected, set selectedmonth to 0
             onClick={() =>
