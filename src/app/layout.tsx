@@ -7,6 +7,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
 import { ThemeProvider } from "@/components/themes-provider";
+import { Navbar } from "@/components/ui/navbar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,7 +29,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "bg-background min-h-screen font-sans antialiased",
+          "min-h-screen bg-background font-sans antialiased",
           inter.variable,
         )}
       >
@@ -39,7 +40,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TRPCReactProvider cookies={cookies().toString()}>
-            {children}
+            <>
+              <Navbar />
+              {children}
+            </>
           </TRPCReactProvider>
         </ThemeProvider>
       </body>
