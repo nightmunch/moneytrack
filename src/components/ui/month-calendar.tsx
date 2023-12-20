@@ -1,18 +1,16 @@
 "use client";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Button } from "./button";
-import { useState } from "react";
 
-export const MonthCalendar = () => {
+export const MonthCalendar = ({
+  date,
+  setDate,
+}: {
+  date: Date | undefined;
+  setDate: (date: Date | undefined) => void;
+}) => {
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
-  const [selectedYear, setSelectedYear] = useState(currentYear);
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-  const selectedMonthYear = {
-    month: selectedMonth,
-    year: selectedYear,
-  };
-  console.log({ selectedMonthYear });
   const months = [
     "Jan",
     "Feb",
@@ -28,38 +26,65 @@ export const MonthCalendar = () => {
     "Dec",
   ];
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon-sm"
-          onClick={() => setSelectedYear(selectedYear - 1)}
+          onClick={() =>
+            setDate(
+              date
+                ? new Date(date.getFullYear() - 1, date.getMonth())
+                : new Date(currentYear - 1, currentMonth),
+            )
+          }
         >
           <ChevronLeftIcon className="h-4 w-4" />
         </Button>
-        <h1 className="text-sm font-semibold">{selectedYear}</h1>
+        <h1 className="text-sm font-semibold">
+          {date ? date.getFullYear() : currentYear}
+        </h1>
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon-sm"
-          onClick={() => setSelectedYear(selectedYear + 1)}
+          onClick={() =>
+            setDate(
+              date
+                ? new Date(date.getFullYear() + 1, date.getMonth())
+                : new Date(currentYear + 1, currentMonth),
+            )
+          }
         >
           <ChevronRightIcon className="h-4 w-4" />
         </Button>
       </div>
-      <div className="grid grid-cols-3 gap-1 text-center">
+      <div className="grid grid-cols-3 text-center">
         {months.map((month, index) => (
           <Button
-            variant="ghost"
+            variant={
+              // Set the variant based on the selected month and current month
+              date?.getMonth() == index
+                ? "default" // Use "default" variant if the month is selected
+                : index == currentMonth
+                  ? "accent" // Use "accent" variant if it's the current month
+                  : "ghost" // Use "ghost" variant for other months
+            }
             key={month}
-            onClick={() => setSelectedMonth(index + 1)}
-            className={`focus:bg-accent ${
-              selectedMonth == index + 1 ? "bg-accent" : ""
-            }`}
+            // if the current month is selected, set selectedmonth to 0
+            onClick={() =>
+              setDate(
+                date && date.getMonth() === index
+                  ? undefined
+                  : date
+                    ? new Date(date.getFullYear(), index)
+                    : new Date(currentYear, index),
+              )
+            }
           >
             {month}
           </Button>
         ))}
       </div>
-    </>
+    </div>
   );
 };
