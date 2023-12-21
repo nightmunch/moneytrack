@@ -1,6 +1,7 @@
 import { MonthPicker } from "@/components/ui/month-picker";
 import { type Transaction, columns } from "./columns";
 import { DataTable } from "./data-table";
+import ClientOnly from "@/components/client-only";
 
 async function getData(): Promise<Transaction[]> {
   // Fetch data from your API here.
@@ -23,7 +24,9 @@ export default async function Transactions() {
     <div className="flex flex-col gap-3 px-10 py-4">
       <h1 className="text-xl font-semibold text-primary">Transactions</h1>
       <MonthPicker />
-      <DataTable columns={columns} data={data} />
+      <ClientOnly>
+        <DataTable columns={columns} data={data} />
+      </ClientOnly>
     </div>
   );
 }

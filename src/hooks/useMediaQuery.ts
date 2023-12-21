@@ -1,10 +1,9 @@
-"use client";
 import { useEffect, useState } from "react";
 
 export function useMediaQuery(query: string): boolean {
-  if (typeof window === "undefined") {
-    throw new Error("useMediaQuery() can not be used outside of the browser");
-  }
+  //   if (typeof window === "undefined") {
+  //     throw new Error("useMediaQuery() can not be used outside of the browser");
+  //   }
   const getMatches = (query: string): boolean => {
     // Prevents SSR issues
     if (typeof window !== "undefined") {
