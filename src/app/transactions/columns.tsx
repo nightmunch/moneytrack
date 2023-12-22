@@ -60,10 +60,11 @@ export const columns: ColumnDef<Transaction>[] = [
         style: "currency",
         currency: "MYR",
       }).format(amount);
+      const formattedWithCustomCurrency = formatted.replace("MYR", "RM");
 
       return (
         <div className="text-right font-semibold text-destructive">
-          {formatted}
+          {formattedWithCustomCurrency}
         </div>
       );
     },
