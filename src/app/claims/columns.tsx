@@ -4,6 +4,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { Badge } from "@/components/ui/badge";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -11,6 +12,7 @@ export type Claim = {
   id: string;
   item: string;
   amount: number;
+  status: "Claimed" | "Unclaimed";
   date: Date;
 };
 
@@ -37,6 +39,14 @@ export const columns: ColumnDef<Claim>[] = [
     },
   },
   {
+    accessorKey: "status",
+    header: () => <div className="text-left">Status</div>,
+    cell: ({ row }) => {
+      const status = row.getValue("status");
+      return <Badge>{status as string}</Badge>;
+    },
+  },
+  {
     accessorKey: "amount",
     header: () => <div className="text-right">Amount</div>,
     cell: ({ row }) => {
@@ -53,13 +63,29 @@ export const columns: ColumnDef<Claim>[] = [
         </div>
       );
     },
-    footer: ({ table }) =>
-      table
-        .getFilteredRowModel()
-        .rows.reduce(
-          (total, row) => total + parseFloat(row.getValue("amount")),
-          0,
-        ),
+    footer: ({ table }) => {
+      const filteredRows = table.getFilteredRowModel().rows;
+      let total = 0;
+
+      filteredRows.forEach((row) => {
+        if (row.getValue("status") == "Unclaimed") {
+          total += parseFloat(row.getValue("amount"));
+        }
+      });
+
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "MYR",
+      })
+        .format(total)
+        .replace("MYR", "RM");
+
+      return (
+        <div className="text-right font-bold">
+          Total: <span className="text-primary">{formatted}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "date",

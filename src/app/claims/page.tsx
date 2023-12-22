@@ -1,3 +1,4 @@
+import { date } from "zod";
 import { type Claim, columns } from "./columns";
 import { DataTable } from "./data-table";
 import ClientOnly from "@/components/client-only";
@@ -8,6 +9,7 @@ async function getData(): Promise<Claim[]> {
     {
       id: "728ed52f",
       item: "KFC Subang",
+      status: "Unclaimed",
       amount: 100,
       date: new Date(),
     },
@@ -15,12 +17,14 @@ async function getData(): Promise<Claim[]> {
       id: "728ed52d",
       item: "Subway",
       amount: 100,
+      status: "Claimed",
       date: new Date(),
     },
     {
       id: "728ed52e",
       item: "My50",
       amount: 100,
+      status: "Unclaimed",
       date: new Date(),
     },
     // ...
