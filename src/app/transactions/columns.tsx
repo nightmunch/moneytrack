@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { type Category, getColorByCategory } from "@/lib/dicts";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -12,7 +13,7 @@ export type Transaction = {
   id: string;
   item: string;
   amount: number;
-  category: string;
+  category: Category;
   date: Date;
 };
 
@@ -31,18 +32,11 @@ export const columns: ColumnDef<Transaction>[] = [
           {isMobile && (
             <>
               <div>
-                <Badge
-                  className="px-1 py-0
-                "
-                >
-                  {category as string}
-                </Badge>
+                <CategoryBadge category={category as Category} />
               </div>
-              <div>
-                <p className="text-xs text-muted-foreground">
-                  {format(date, "dd MMM yyyy")}
-                </p>
-              </div>
+              <p className="text-xs text-muted-foreground">
+                {format(date, "dd MMM yyyy")}
+              </p>
             </>
           )}
         </div>
@@ -54,7 +48,7 @@ export const columns: ColumnDef<Transaction>[] = [
     header: () => <div className="text-left">Category</div>,
     cell: ({ row }) => {
       const category = row.getValue("category");
-      return <Badge>{category as string}</Badge>;
+      return <CategoryBadge category={category as Category} />;
     },
   },
   {
@@ -83,3 +77,15 @@ export const columns: ColumnDef<Transaction>[] = [
     },
   },
 ];
+
+const CategoryBadge = ({ category }: { category: Category }) => {
+  return (
+    <Badge
+      className={`bg-[${getColorByCategory(
+        category,
+      )}] text-badgecontent px-1 py-0`}
+    >
+      {category}
+    </Badge>
+  );
+};

@@ -9,6 +9,7 @@ module.exports = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
+  safelist: ["bg-[#58c551]", "bg-[#f5a623]", "bg-[#24cced]"],
   theme: {
     container: {
       center: true,
@@ -56,6 +57,7 @@ module.exports = {
           foreground: "var(--card-foreground)",
         },
         content: "var(--content)",
+        badgecontent: "var(--badge-content)",
       },
       borderRadius: {
         lg: "var(--radius)",

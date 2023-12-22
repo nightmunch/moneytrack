@@ -8,9 +8,23 @@ async function getData(): Promise<Transaction[]> {
   return [
     {
       id: "728ed52f",
-      item: "Payment",
+      item: "Woodfire Shah Alam",
       amount: 100,
       category: "Food",
+      date: new Date(),
+    },
+    {
+      id: "728ed52d",
+      item: "Petronas to Penang",
+      amount: 100,
+      category: "Petrol",
+      date: new Date(),
+    },
+    {
+      id: "728ed52e",
+      item: "My50",
+      amount: 100,
+      category: "Transportation",
       date: new Date(),
     },
     // ...
