@@ -43,7 +43,11 @@ export const columns: ColumnDef<Claim>[] = [
     header: () => <div className="text-left">Status</div>,
     cell: ({ row }) => {
       const status = row.getValue("status");
-      return <Badge>{status as string}</Badge>;
+      return (
+        <Badge className="text-badgecontent px-1 py-0">
+          {status as string}
+        </Badge>
+      );
     },
   },
   {
@@ -82,7 +86,9 @@ export const columns: ColumnDef<Claim>[] = [
 
       return (
         <div className="text-right font-bold">
-          Total: <span className="text-primary">{formatted}</span>
+          Total <Badge className="text-badgecontent px-1 py-0">Unclaimed</Badge>
+          {" : "}
+          <span className="text-primary">{formatted}</span>
         </div>
       );
     },
