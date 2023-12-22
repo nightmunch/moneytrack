@@ -55,6 +55,7 @@ export const columns: ColumnDef<Claim>[] = [
     header: () => <div className="text-right">Amount</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
+      const status = row.getValue("status");
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "MYR",
@@ -62,7 +63,11 @@ export const columns: ColumnDef<Claim>[] = [
       const formattedWithCustomCurrency = formatted.replace("MYR", "RM");
 
       return (
-        <div className="text-right font-semibold">
+        <div
+          className={`text-right font-semibold ${
+            status === "Unclaimed" && "text-destructive"
+          }`}
+        >
           {formattedWithCustomCurrency}
         </div>
       );
@@ -72,7 +77,7 @@ export const columns: ColumnDef<Claim>[] = [
       let total = 0;
 
       filteredRows.forEach((row) => {
-        if (row.getValue("status") == "Unclaimed") {
+        if (row.getValue("status") === "Unclaimed") {
           total += parseFloat(row.getValue("amount"));
         }
       });
@@ -88,7 +93,7 @@ export const columns: ColumnDef<Claim>[] = [
         <div className="text-right font-bold">
           Total <Badge className="text-badgecontent px-1 py-0">Unclaimed</Badge>
           {" : "}
-          <span className="text-primary">{formatted}</span>
+          <span className="text-destructive">{formatted}</span>
         </div>
       );
     },
