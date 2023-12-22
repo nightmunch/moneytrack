@@ -12,6 +12,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -94,6 +95,32 @@ export function DataTable<TData, TValue>({
             </TableRow>
           )}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableHead colSpan={columns.length}>
+              <div className="text-right font-bold">
+                Total:
+                <span className="text-destructive">
+                  {" - "}
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "MYR",
+                  })
+                    .format(
+                      table
+                        .getPreFilteredRowModel()
+                        .rows.reduce(
+                          (total, row) =>
+                            total + parseFloat(row.getValue("amount")),
+                          0,
+                        ),
+                    )
+                    .replace("MYR", "RM")}
+                </span>
+              </div>
+            </TableHead>
+          </TableRow>
+        </TableFooter>
       </Table>
     </div>
   );
