@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { PanelRight } from "lucide-react";
 
 export function Sidebar() {
   const pages = [
@@ -22,7 +23,9 @@ export function Sidebar() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Open</Button>
+        <Button variant="outline" size="icon">
+          <PanelRight className="h-4 w-4" />
+        </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-[15rem]">
         <SheetHeader>

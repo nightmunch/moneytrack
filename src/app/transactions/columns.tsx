@@ -64,7 +64,7 @@ export const columns: ColumnDef<Transaction>[] = [
 
       return (
         <div className="text-right font-semibold text-destructive">
-          - {formattedWithCustomCurrency}
+          -{formattedWithCustomCurrency}
         </div>
       );
     },
@@ -85,7 +85,7 @@ export const columns: ColumnDef<Transaction>[] = [
 
       return (
         <div className="text-right font-bold">
-          Total: <span className="text-destructive">- {formatted}</span>
+          Total: <span className="text-destructive">-{formatted}</span>
         </div>
       );
     },
@@ -105,7 +105,7 @@ const CategoryBadge = ({ category }: { category: Category }) => {
     <Badge
       className={`bg-[${getColorByCategory(
         category,
-      )}] text-badgecontent px-1 py-0`}
+      )}] px-1 py-0 text-badgecontent`}
     >
       {category}
     </Badge>
