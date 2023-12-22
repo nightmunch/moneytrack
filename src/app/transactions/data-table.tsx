@@ -96,30 +96,24 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
         <TableFooter>
-          <TableRow>
-            <TableHead colSpan={columns.length}>
-              <div className="text-right font-bold">
-                Total:
-                <span className="text-destructive">
-                  {" - "}
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "MYR",
-                  })
-                    .format(
-                      table
-                        .getPreFilteredRowModel()
-                        .rows.reduce(
-                          (total, row) =>
-                            total + parseFloat(row.getValue("amount")),
-                          0,
-                        ),
-                    )
-                    .replace("MYR", "RM")}
-                </span>
-              </div>
-            </TableHead>
-          </TableRow>
+          {table.getFooterGroups().map((footerGroup) => (
+            <TableRow key={footerGroup.id}>
+              {footerGroup.headers.map((header) => (
+                <TableCell
+                  key={header.id}
+                  colSpan={header.colSpan}
+                  className="text-right"
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.footer,
+                        header.getContext(),
+                      )}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
         </TableFooter>
       </Table>
     </div>

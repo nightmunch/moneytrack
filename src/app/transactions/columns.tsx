@@ -68,6 +68,27 @@ export const columns: ColumnDef<Transaction>[] = [
         </div>
       );
     },
+    footer: ({ table }) => {
+      const filteredRows = table.getFilteredRowModel().rows;
+      let total = 0;
+
+      filteredRows.forEach((row) => {
+        total += parseFloat(row.getValue("amount"));
+      });
+
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "MYR",
+      })
+        .format(total)
+        .replace("MYR", "RM");
+
+      return (
+        <div className="text-right font-bold">
+          Total: <span className="text-destructive">- {formatted}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "date",
