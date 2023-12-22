@@ -64,7 +64,7 @@ export const columns: ColumnDef<Transaction>[] = [
 
       return (
         <div className="text-right font-semibold text-destructive">
-          {formattedWithCustomCurrency}
+          - {formattedWithCustomCurrency}
         </div>
       );
     },
