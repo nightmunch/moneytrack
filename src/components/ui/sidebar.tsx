@@ -37,7 +37,7 @@ export function Sidebar() {
         <Separator className="my-4" />
         <div className="grid gap-2">
           {pages.map((page) => (
-            <SheetClose asChild>
+            <SheetClose asChild key={page.url}>
               <Button
                 variant={`${pathname === page.url ? "default" : "outline"}`}
                 className="justify-start"
