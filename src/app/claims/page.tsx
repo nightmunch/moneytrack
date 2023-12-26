@@ -2,7 +2,8 @@ import { Button } from "@/components/ui/button";
 import { type Claim, columns } from "./columns";
 import { DataTable } from "./data-table";
 import ClientOnly from "@/components/client-only";
-import { Plus, Sheet } from "lucide-react";
+import { Sheet } from "lucide-react";
+import { NewClaimDrawer } from "@/components/ui/claims/new-claim-drawer";
 
 async function getData(): Promise<Claim[]> {
   // Fetch data from your API here.
@@ -46,10 +47,9 @@ export default async function Claims() {
           <span className="sr-only">Download to Excel</span>
         </Button>
         <Button variant={"outline"}>Claim All</Button>
-        <Button variant={"default"} size={"icon"}>
-          <Plus className="h-4 w-4" />
-          <span className="sr-only">Add Claim</span>
-        </Button>
+        <ClientOnly>
+          <NewClaimDrawer />
+        </ClientOnly>
       </div>
       <ClientOnly>
         <DataTable columns={columns} data={data} />
