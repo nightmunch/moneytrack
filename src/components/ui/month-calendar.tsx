@@ -67,38 +67,31 @@ export const MonthCalendar = ({
           (button) => button === currentActiveElement,
         );
 
-        if (event.key === "ArrowUp") {
+        type Direction = "ArrowUp" | "ArrowDown" | "ArrowLeft" | "ArrowRight";
+
+        function handleButtonNavigation(index: number, update: number) {
           event.preventDefault();
-          const previousButton = buttonElements[currentButtonIndex - 3];
-          if (previousButton) {
-            previousButton.focus();
+          const button = buttonElements[index];
+          if (button) {
+            button.focus();
           } else {
-            updateDate(-1);
+            updateDate(update);
           }
-        } else if (event.key === "ArrowDown") {
-          event.preventDefault();
-          const nextButton = buttonElements[currentButtonIndex + 3];
-          if (nextButton) {
-            nextButton.focus();
-          } else {
-            updateDate(1);
-          }
-        } else if (event.key === "ArrowLeft") {
-          event.preventDefault();
-          const previousButton = buttonElements[currentButtonIndex - 1];
-          if (previousButton) {
-            previousButton.focus();
-          } else {
-            updateDate(-1);
-          }
-        } else if (event.key === "ArrowRight") {
-          event.preventDefault();
-          const nextButton = buttonElements[currentButtonIndex + 1];
-          if (nextButton) {
-            nextButton.focus();
-          } else {
-            updateDate(1);
-          }
+        }
+
+        switch (event.key as Direction) {
+          case "ArrowUp":
+            handleButtonNavigation(currentButtonIndex - 3, -1);
+            break;
+          case "ArrowDown":
+            handleButtonNavigation(currentButtonIndex + 3, 1);
+            break;
+          case "ArrowLeft":
+            handleButtonNavigation(currentButtonIndex - 1, -1);
+            break;
+          case "ArrowRight":
+            handleButtonNavigation(currentButtonIndex + 1, 1);
+            break;
         }
       }
     };
