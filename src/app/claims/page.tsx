@@ -4,6 +4,7 @@ import { DataTable } from "./data-table";
 import ClientOnly from "@/components/client-only";
 import { Sheet } from "lucide-react";
 import { NewClaimDrawer } from "@/components/ui/claims/new-claim-drawer";
+import { Skeleton } from "@/components/ui/skeleton";
 
 async function getData(): Promise<Claim[]> {
   // Fetch data from your API here.
@@ -41,19 +42,26 @@ export default async function Claims() {
           Here's the list of all your claims.
         </h2>
       </div>
-      <div className="flex justify-end gap-2">
-        <Button variant={"outline"} size={"icon"}>
-          <Sheet className="h-4 w-4" />
-          <span className="sr-only">Download to Excel</span>
-        </Button>
-        <Button variant={"outline"}>Claim All</Button>
-        <ClientOnly>
+      <ClientOnly LoadingComponent={<Loading />}>
+        <div className="flex justify-end gap-2">
+          <Button variant={"outline"} size={"icon"}>
+            <Sheet className="h-4 w-4" />
+            <span className="sr-only">Download to Excel</span>
+          </Button>
+          <Button variant={"outline"}>Claim All</Button>
           <NewClaimDrawer />
-        </ClientOnly>
-      </div>
-      <ClientOnly>
+        </div>
         <DataTable columns={columns} data={data} />
       </ClientOnly>
+    </div>
+  );
+}
+
+function Loading() {
+  return (
+    <div className="grid grid-flow-row gap-2">
+      <Skeleton className="h-8 w-full" />
+      <Skeleton className="h-8 w-full" />
     </div>
   );
 }
