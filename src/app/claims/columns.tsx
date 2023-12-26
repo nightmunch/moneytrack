@@ -12,7 +12,6 @@ export type Claim = {
   id: string;
   item: string;
   amount: number;
-  status: "Claimed" | "Unclaimed";
   date: Date;
 };
 
@@ -38,24 +37,23 @@ export const columns: ColumnDef<Claim>[] = [
       );
     },
   },
-  {
-    accessorKey: "status",
-    header: () => <div className="text-left">Status</div>,
-    cell: ({ row }) => {
-      const status = row.getValue("status");
-      return (
-        <Badge className="text-badgecontent px-1 py-0">
-          {status as string}
-        </Badge>
-      );
-    },
-  },
+  //   {
+  //     accessorKey: "status",
+  //     header: () => <div className="text-left">Status</div>,
+  //     cell: ({ row }) => {
+  //       const status = row.getValue("status");
+  //       return (
+  //         <Badge className="text-badgecontent px-1 py-0">
+  //           {status as string}
+  //         </Badge>
+  //       );
+  //     },
+  //   },
   {
     accessorKey: "amount",
     header: () => <div className="text-right">Amount</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
-      const status = row.getValue("status");
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "MYR",
@@ -63,11 +61,7 @@ export const columns: ColumnDef<Claim>[] = [
       const formattedWithCustomCurrency = formatted.replace("MYR", "RM");
 
       return (
-        <div
-          className={`text-right font-semibold ${
-            status === "Unclaimed" && "text-destructive"
-          }`}
-        >
+        <div className={`text-right font-semibold`}>
           {formattedWithCustomCurrency}
         </div>
       );
@@ -77,9 +71,7 @@ export const columns: ColumnDef<Claim>[] = [
       let total = 0;
 
       filteredRows.forEach((row) => {
-        if (row.getValue("status") === "Unclaimed") {
-          total += parseFloat(row.getValue("amount"));
-        }
+        total += parseFloat(row.getValue("amount"));
       });
 
       const formatted = new Intl.NumberFormat("en-US", {
@@ -91,9 +83,9 @@ export const columns: ColumnDef<Claim>[] = [
 
       return (
         <div className="text-right font-bold">
-          Total <Badge className="text-badgecontent px-1 py-0">Unclaimed</Badge>
+          Total <Badge className="px-1 py-0 text-badgecontent">Unclaimed</Badge>
           {" : "}
-          <span className="text-destructive">{formatted}</span>
+          <span>{formatted}</span>
         </div>
       );
     },
