@@ -5,36 +5,51 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { motion } from "framer-motion";
 
 export function ModeToggle() {
-  const { setTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
+
+  const sunAnimation = {
+    initial: { rotate: -90, scale: resolvedTheme === "dark" ? 0 : 1 },
+    animate: {
+      rotate: resolvedTheme === "dark" ? -90 : 0,
+      scale: resolvedTheme === "dark" ? 1 : 0,
+    },
+    transition: { duration: 0.3 },
+  };
+
+  const moonAnimation = {
+    initial: {
+      rotate: resolvedTheme === "dark" ? 90 : 0,
+      scale: resolvedTheme === "dark" ? 1 : 0,
+    },
+    animate: { rotate: 0, scale: resolvedTheme === "dark" ? 0 : 1 },
+    transition: { duration: 0.3 },
+  };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+    >
+      <motion.div
+        initial={sunAnimation.initial}
+        animate={sunAnimation.animate}
+        transition={{ duration: 0.3 }}
+      >
+        <Moon className="h-[1.2rem] w-[1.2rem]" />
+      </motion.div>
+      <motion.div
+        className="absolute"
+        initial={moonAnimation.initial}
+        animate={moonAnimation.animate}
+        transition={{ duration: 0.3 }}
+      >
+        <Sun className="h-[1.2rem] w-[1.2rem]" />
+      </motion.div>
+      <span className="sr-only">Toggle theme</span>
+    </Button>
   );
 }
