@@ -7,7 +7,7 @@ const categoryToColor = [
 
 export type Category = (typeof categoryToColor)[number]["category"];
 
-export function getColorByCategory(category: Category): string | undefined {
+export function getColorByCategory(category: Category): string | null {
   const match = categoryToColor.find((item) => item.category === category);
-  return match ? match.color : undefined;
+  return match ? match.color : null;
 }
