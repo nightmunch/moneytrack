@@ -37,18 +37,6 @@ export const columns: ColumnDef<Claim>[] = [
       );
     },
   },
-  //   {
-  //     accessorKey: "status",
-  //     header: () => <div className="text-left">Status</div>,
-  //     cell: ({ row }) => {
-  //       const status = row.getValue("status");
-  //       return (
-  //         <Badge className="text-badgecontent px-1 py-0">
-  //           {status as string}
-  //         </Badge>
-  //       );
-  //     },
-  //   },
   {
     accessorKey: "amount",
     header: () => <div className="text-right">Amount</div>,

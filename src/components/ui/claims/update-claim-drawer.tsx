@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { Separator } from "../separator";
 import { DatePicker } from "../date-picker";
-import { type z } from "zod";
+import { date, type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -36,43 +36,30 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-} from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { toast } from "react-hot-toast";
 import { claimFormSchema as formSchema } from "@/lib/schema";
+import { useAtom, useAtomValue } from "jotai";
+import { claimUpdateAtom, claimUpdateDrawerHandlerAtom } from "@/lib/atoms";
 
-export function NewClaimDrawer() {
-  const [open, setOpen] = useState(false);
+export function UpdateClaimDrawer() {
+  const [open, setOpen] = useAtom(claimUpdateDrawerHandlerAtom);
   const isMobile = useMediaQuery("(max-width: 640px)");
 
-  const title = "Add Claim";
-  const description = "Add a new claim to your account.";
+  const title = "Update Claim";
+  const description = "Update a claim in your account.";
 
   if (!isMobile) {
     return (
       <TooltipProvider>
         <Dialog open={open} onOpenChange={setOpen}>
-          <Tooltip>
-            <DialogTrigger asChild>
-              <TooltipTrigger asChild>
-                <Button variant={"default"} size={"icon"}>
-                  <OpenAddClaimButton />
-                </Button>
-              </TooltipTrigger>
-            </DialogTrigger>
-            <TooltipContent>Add Claim</TooltipContent>
-          </Tooltip>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle className="text-primary">{title}</DialogTitle>
               <DialogDescription>{description}</DialogDescription>
             </DialogHeader>
             <Separator />
-            <AddClaimForm setOpen={setOpen} />
+            <UpdateClaimForm setOpen={setOpen} />
           </DialogContent>
         </Dialog>
       </TooltipProvider>
@@ -81,18 +68,12 @@ export function NewClaimDrawer() {
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button variant={"default"} size={"icon"}>
-          <OpenAddClaimButton />
-        </Button>
-      </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle className="text-primary">{title}</DrawerTitle>
           <DrawerDescription>{description}</DrawerDescription>
         </DrawerHeader>
-        <Separator className="mb-5" />
-        <AddClaimForm className="px-4" setOpen={setOpen} />
+        <UpdateClaimForm className="px-4" setOpen={setOpen} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -103,17 +84,19 @@ export function NewClaimDrawer() {
   );
 }
 
-function AddClaimForm({
+function UpdateClaimForm({
   className,
   setOpen,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
 } & React.ComponentProps<"form">) {
+  const claimUpdate = useAtomValue(claimUpdateAtom);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      item: "",
-      date: new Date(),
+      item: claimUpdate?.item ?? "",
+      amount: claimUpdate?.amount,
+      date: claimUpdate?.date ?? new Date(),
     },
   });
 
@@ -121,7 +104,7 @@ function AddClaimForm({
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
-    toast.success("Claim added successfully. 🎉");
+    toast.success("Claim updated successfully. 🎉");
     setOpen(false);
   }
   return (
@@ -197,7 +180,7 @@ function AddClaimForm({
   );
 }
 
-const OpenAddClaimButton = () => {
+const OpenUpdateClaimButton = () => {
   return (
     <>
       <Plus className="h-4 w-4" />

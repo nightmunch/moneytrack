@@ -4,6 +4,7 @@ import { DataTable } from "./data-table";
 import ClientOnly from "@/components/client-only";
 import { Sheet } from "lucide-react";
 import { NewClaimDrawer } from "@/components/ui/claims/new-claim-drawer";
+import { UpdateClaimDrawer } from "@/components/ui/claims/update-claim-drawer";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
@@ -63,6 +64,7 @@ export default async function Claims() {
           </TooltipProvider>
           <Button variant={"outline"}>Claim All</Button>
           <NewClaimDrawer />
+          <UpdateClaimDrawer />
         </div>
         <DataTable columns={columns} data={data} />
       </ClientOnly>
