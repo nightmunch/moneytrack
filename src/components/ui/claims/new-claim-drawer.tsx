@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
-import { Archive, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Separator } from "../separator";
 import { DatePicker } from "../date-picker";
 import * as z from "zod";
@@ -42,6 +42,7 @@ import {
   TooltipContent,
   TooltipProvider,
 } from "@/components/ui/tooltip";
+import { toast } from "react-hot-toast";
 
 export function NewClaimDrawer() {
   const [open, setOpen] = useState(false);
@@ -62,7 +63,7 @@ export function NewClaimDrawer() {
                 </Button>
               </TooltipTrigger>
             </DialogTrigger>
-            <TooltipContent>Archive</TooltipContent>
+            <TooltipContent>Add Claim</TooltipContent>
           </Tooltip>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -70,7 +71,7 @@ export function NewClaimDrawer() {
               <DialogDescription>{description}</DialogDescription>
             </DialogHeader>
             <Separator />
-            <AddClaimForm />
+            <AddClaimForm setOpen={setOpen} />
           </DialogContent>
         </Dialog>
       </TooltipProvider>
@@ -90,7 +91,7 @@ export function NewClaimDrawer() {
           <DrawerDescription>{description}</DrawerDescription>
         </DrawerHeader>
         <Separator className="mb-5" />
-        <AddClaimForm className="px-4" />
+        <AddClaimForm className="px-4" setOpen={setOpen} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -101,7 +102,12 @@ export function NewClaimDrawer() {
   );
 }
 
-function AddClaimForm({ className }: React.ComponentProps<"form">) {
+function AddClaimForm({
+  className,
+  setOpen,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+} & React.ComponentProps<"form">) {
   const formSchema = z.object({
     item: z.string().min(2, {
       message: "Item name must be at least 2 characters",
@@ -128,6 +134,8 @@ function AddClaimForm({ className }: React.ComponentProps<"form">) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+    toast.success("Claim added successfully. 🎉");
+    setOpen(false);
   }
   return (
     <Form {...form}>
@@ -196,7 +204,7 @@ function AddClaimForm({ className }: React.ComponentProps<"form">) {
             )}
           />
         </div>
-        <Button type="submit">Save changes</Button>
+        <Button type="submit">Add new claim</Button>
       </form>
     </Form>
   );

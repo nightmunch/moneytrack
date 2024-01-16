@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/themes-provider";
 import { Navbar } from "@/components/ui/navbar";
 
+import { Toaster } from "react-hot-toast";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -41,6 +43,11 @@ export default function RootLayout({
         >
           <TRPCReactProvider cookies={cookies().toString()}>
             <>
+              <Toaster
+                toastOptions={{
+                  className: "!bg-card !text-card-foreground",
+                }}
+              />
               <Navbar />
               {children}
             </>
