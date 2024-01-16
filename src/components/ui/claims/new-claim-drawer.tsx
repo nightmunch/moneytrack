@@ -22,7 +22,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-react";
+import { Archive, Plus } from "lucide-react";
 import { Separator } from "../separator";
 import { DatePicker } from "../date-picker";
 import * as z from "zod";
@@ -36,6 +36,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 
 export function NewClaimDrawer() {
   const [open, setOpen] = useState(false);
@@ -46,21 +52,28 @@ export function NewClaimDrawer() {
 
   if (!isMobile) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button variant={"default"} size={"icon"}>
-            <OpenAddClaimButton />
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className="text-primary">{title}</DialogTitle>
-            <DialogDescription>{description}</DialogDescription>
-          </DialogHeader>
-          <Separator />
-          <AddClaimForm />
-        </DialogContent>
-      </Dialog>
+      <TooltipProvider>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <Tooltip>
+            <DialogTrigger asChild>
+              <TooltipTrigger asChild>
+                <Button variant={"default"} size={"icon"}>
+                  <OpenAddClaimButton />
+                </Button>
+              </TooltipTrigger>
+            </DialogTrigger>
+            <TooltipContent>Archive</TooltipContent>
+          </Tooltip>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle className="text-primary">{title}</DialogTitle>
+              <DialogDescription>{description}</DialogDescription>
+            </DialogHeader>
+            <Separator />
+            <AddClaimForm />
+          </DialogContent>
+        </Dialog>
+      </TooltipProvider>
     );
   }
 

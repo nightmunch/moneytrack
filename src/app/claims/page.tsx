@@ -5,6 +5,12 @@ import ClientOnly from "@/components/client-only";
 import { Sheet } from "lucide-react";
 import { NewClaimDrawer } from "@/components/ui/claims/new-claim-drawer";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 
 async function getData(): Promise<Claim[]> {
   // Fetch data from your API here.
@@ -44,10 +50,17 @@ export default async function Claims() {
       </div>
       <ClientOnly LoadingComponent={<Loading />}>
         <div className="flex justify-end gap-2">
-          <Button variant={"outline"} size={"icon"}>
-            <Sheet className="h-4 w-4" />
-            <span className="sr-only">Download to Excel</span>
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant={"outline"} size={"icon"}>
+                  <Sheet className="h-4 w-4" />
+                  <span className="sr-only">Download to Excel</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Download to Excel</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <Button variant={"outline"}>Claim All</Button>
           <NewClaimDrawer />
         </div>
