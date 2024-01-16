@@ -174,17 +174,8 @@ function UpdateClaimForm({
             )}
           />
         </div>
-        <Button type="submit">Add new claim</Button>
+        <Button type="submit">Update claim</Button>
       </form>
     </Form>
   );
 }
-
-const OpenUpdateClaimButton = () => {
-  return (
-    <>
-      <Plus className="h-4 w-4" />
-      <span className="sr-only">Add Claim</span>
-    </>
-  );
-};
