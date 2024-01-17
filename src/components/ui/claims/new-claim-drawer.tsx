@@ -44,6 +44,7 @@ import {
 } from "@/components/ui/tooltip";
 import { toast } from "react-hot-toast";
 import { claimFormSchema as formSchema } from "@/lib/schema";
+import { api } from "@/trpc/react";
 
 export function NewClaimDrawer() {
   const [open, setOpen] = useState(false);
@@ -117,12 +118,15 @@ function AddClaimForm({
     },
   });
 
+  const createClaim = api.claim.create.useMutation({
+    onSuccess: () => {
+      toast.success("Claim added successfully. 🎉");
+      setOpen(false);
+    },
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    toast.success("Claim added successfully. 🎉");
-    setOpen(false);
+    createClaim.mutate(values);
   }
   return (
     <Form {...form}>

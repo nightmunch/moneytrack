@@ -36,6 +36,25 @@ export const posts = pgTable(
   }),
 );
 
+export const claims = pgTable(
+  "claim",
+  {
+    id: bigserial("id", { mode: "number" }).notNull().primaryKey(),
+    item: varchar("item", { length: 256 }),
+    amount: bigint("amount", { mode: "number" }).notNull(),
+    date: timestamp("date").notNull(),
+    createdById: varchar("createdById", { length: 255 }).notNull(),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (claim) => ({
+    createdByIdIdx: index("createdById_idx").on(claim.createdById),
+    nameIndex: index("name_idx").on(claim.item),
+    dateIndex: index("date_idx").on(claim.date),
+  }),
+);
+
 export const users = pgTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
@@ -50,6 +69,7 @@ export const users = pgTable("user", {
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
+  claims: many(claims),
 }));
 
 export const accounts = pgTable(
