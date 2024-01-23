@@ -116,6 +116,7 @@ function AddClaimForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       item: "",
+      amount: 0,
       date: new Date(),
     },
   });
@@ -172,6 +173,7 @@ function AddClaimForm({
                       id="amount"
                       placeholder="10.00"
                       {...field}
+                      value={field.value === 0 ? "" : field.value}
                       onChange={(event) =>
                         field.onChange(event.target.valueAsNumber)
                       }
