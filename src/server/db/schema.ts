@@ -7,8 +7,8 @@ import {
   timestamp,
   index,
   integer,
-  bigint,
   bigserial,
+  doublePrecision,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
@@ -41,7 +41,7 @@ export const claims = pgTable(
   {
     id: bigserial("id", { mode: "number" }).notNull().primaryKey(),
     item: varchar("item", { length: 256 }),
-    amount: bigint("amount", { mode: "number" }).notNull(),
+    amount: doublePrecision("amount").notNull(),
     date: timestamp("date").notNull(),
     createdById: varchar("createdById", { length: 255 }).notNull(),
     createdAt: timestamp("created_at")
