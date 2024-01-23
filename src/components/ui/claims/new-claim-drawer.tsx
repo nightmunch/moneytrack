@@ -45,6 +45,7 @@ import {
 import { toast } from "react-hot-toast";
 import { claimFormSchema as formSchema } from "@/lib/schema";
 import { api } from "@/trpc/react";
+import { useRouter } from "next/navigation";
 
 export function NewClaimDrawer() {
   const [open, setOpen] = useState(false);
@@ -110,6 +111,7 @@ function AddClaimForm({
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
 } & React.ComponentProps<"form">) {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -119,9 +121,10 @@ function AddClaimForm({
   });
 
   const createClaim = api.claim.create.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Claim added successfully. 🎉");
       setOpen(false);
+      router.refresh();
     },
   });
 

@@ -40,7 +40,7 @@ export const claims = pgTable(
   "claim",
   {
     id: bigserial("id", { mode: "number" }).notNull().primaryKey(),
-    item: varchar("item", { length: 256 }),
+    item: varchar("item", { length: 256 }).notNull(),
     amount: doublePrecision("amount").notNull(),
     date: timestamp("date").notNull(),
     createdById: varchar("createdById", { length: 255 }).notNull(),

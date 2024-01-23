@@ -5,15 +5,10 @@ import { format } from "date-fns";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Badge } from "@/components/ui/badge";
+import { Claim } from "@/lib/schema";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Claim = {
-  id: string;
-  item: string;
-  amount: number;
-  date: Date;
-};
 
 export const columns: ColumnDef<Claim>[] = [
   {

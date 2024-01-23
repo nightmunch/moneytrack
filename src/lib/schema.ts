@@ -13,3 +13,5 @@ export const claimFormSchema = z.object({
     required_error: "Date is required",
   }),
 });
+
+export type Claim = z.infer<typeof claimFormSchema> & { id: number };

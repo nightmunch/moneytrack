@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { type Claim, columns } from "./columns";
+import { columns } from "./columns";
+import type { Claim } from "@/lib/schema";
 import { DataTable } from "./data-table";
 import ClientOnly from "@/components/client-only";
 import { Sheet } from "lucide-react";
@@ -12,30 +13,26 @@ import {
   TooltipContent,
   TooltipProvider,
 } from "@/components/ui/tooltip";
+import { api } from "@/trpc/server";
 
-async function getData(): Promise<Claim[]> {
+async function getData(): Promise<Claim[] | null> {
   // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      item: "KFC Subang",
-      amount: 100,
-      date: new Date(),
-    },
-    {
-      id: "728ed52d",
-      item: "Subway",
-      amount: 100,
-      date: new Date(),
-    },
-    {
-      id: "728ed52e",
-      item: "My50",
-      amount: 100,
-      date: new Date(),
-    },
-    // ...
-  ];
+  const claimsQuery = await api.claim.getAll.query();
+
+  // remove property createdAt and createdById
+  if (claimsQuery) {
+    const claims = claimsQuery.map((claim) => {
+      return {
+        id: claim.id,
+        item: claim.item,
+        amount: claim.amount,
+        date: claim.date,
+      };
+    });
+    return claims;
+  } else {
+    return null;
+  }
 }
 
 export default async function Claims() {
@@ -66,7 +63,7 @@ export default async function Claims() {
           <NewClaimDrawer />
           <UpdateClaimDrawer />
         </div>
-        <DataTable columns={columns} data={data} />
+        {data && <DataTable columns={columns} data={data} />}
       </ClientOnly>
     </div>
   );

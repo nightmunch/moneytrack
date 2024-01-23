@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { claimUpdateAtom, claimUpdateDrawerHandlerAtom } from "@/lib/atoms";
 import { useSetAtom } from "jotai";
-import { type Claim } from "./columns";
+import type { Claim } from "@/lib/schema";
 
 interface DataTableProps<TValue> {
   columns: ColumnDef<Claim, TValue>[];
