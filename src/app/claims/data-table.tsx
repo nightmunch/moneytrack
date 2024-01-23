@@ -33,6 +33,7 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     status: !isMobile,
     date: !isMobile,
+    id: false,
   });
 
   useEffect(() => {

@@ -38,6 +38,8 @@ import { toast } from "react-hot-toast";
 import { claimFormSchema as formSchema } from "@/lib/schema";
 import { useAtom, useAtomValue } from "jotai";
 import { claimUpdateAtom, claimUpdateDrawerHandlerAtom } from "@/lib/atoms";
+import { api } from "@/trpc/react";
+import { useRouter } from "next/navigation";
 
 export function UpdateClaimDrawer() {
   const [open, setOpen] = useAtom(claimUpdateDrawerHandlerAtom);
@@ -87,13 +89,23 @@ function UpdateClaimForm({
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
 } & React.ComponentProps<"form">) {
+  const router = useRouter();
   const claimUpdate = useAtomValue(claimUpdateAtom);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      id: claimUpdate?.id ?? 0,
       item: claimUpdate?.item ?? "",
       amount: claimUpdate?.amount,
       date: claimUpdate?.date ?? new Date(),
+    },
+  });
+
+  const deleteClaim = api.claim.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Claim deleted successfully. 🎉");
+      setOpen(false);
+      router.refresh();
     },
   });
 
@@ -104,12 +116,15 @@ function UpdateClaimForm({
     toast.success("Claim updated successfully. 🎉");
     setOpen(false);
   }
+
+  function onDelete(values: z.infer<typeof formSchema>) {
+    if (values.id) {
+      deleteClaim.mutate({ id: values.id });
+    }
+  }
   return (
     <Form {...form}>
-      <form
-        className={cn("grid items-start gap-4", className)}
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
+      <form className={cn("grid items-start gap-4", className)}>
         <div className="grid gap-2">
           <FormField
             name="item"
@@ -171,7 +186,12 @@ function UpdateClaimForm({
             )}
           />
         </div>
-        <Button type="submit">Update claim</Button>
+        <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
+          Update claim
+        </Button>
+        <Button variant="destructive" onClick={form.handleSubmit(onDelete)}>
+          Delete claim
+        </Button>
       </form>
     </Form>
   );

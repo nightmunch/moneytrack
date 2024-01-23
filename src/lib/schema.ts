@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const claimFormSchema = z.object({
+  id: z.number().optional(),
   item: z.string().min(2, {
     message: "Item name must be at least 2 characters",
   }),
@@ -14,4 +15,4 @@ export const claimFormSchema = z.object({
   }),
 });
 
-export type Claim = z.infer<typeof claimFormSchema> & { id: number };
+export type Claim = z.infer<typeof claimFormSchema>;

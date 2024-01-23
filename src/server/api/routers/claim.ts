@@ -40,7 +40,7 @@ export const claimRouter = createTRPCRouter({
         .where(eq(claims.id, Number(input.id)));
     }),
   delete: protectedProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
       await ctx.db.delete(claims).where(eq(claims.id, Number(input.id)));
     }),

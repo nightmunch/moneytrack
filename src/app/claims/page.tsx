@@ -23,7 +23,6 @@ async function getData(): Promise<Claim[] | null> {
   if (claimsQuery) {
     const claims = claimsQuery.map((claim) => {
       return {
-        id: claim.id,
         item: claim.item,
         amount: claim.amount,
         date: claim.date,
