@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Badge } from "@/components/ui/badge";
 import type { Claim } from "@/lib/schema";
+import { motion } from "framer-motion";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -19,7 +20,15 @@ export const columns: ColumnDef<Claim>[] = [
       const date = new Date(row.getValue("date"));
 
       return (
-        <div className="flex flex-col gap-1">
+        <motion.div
+          initial={{ maxHeight: 100, scaleY: 1 }}
+          exit={{ maxHeight: 0, scaleY: 0 }}
+          transition={{
+            type: "tween",
+            duration: 0.25,
+          }}
+          className="flex flex-col gap-1"
+        >
           <div>{row.getValue("item")}</div>
           {isMobile && (
             <>
@@ -28,7 +37,7 @@ export const columns: ColumnDef<Claim>[] = [
               </p>
             </>
           )}
-        </div>
+        </motion.div>
       );
     },
   },

@@ -36,7 +36,7 @@ export default async function Transactions() {
   const data = await getData();
 
   return (
-    <div className="flex flex-col gap-3 px-10 py-4">
+    <div className="flex flex-col gap-3 px-10 py-8 sm:px-36">
       <div className="pb-2">
         <h1 className="text-xl font-semibold text-primary">Transactions</h1>
         <h2 className="text-sm text-muted-foreground">

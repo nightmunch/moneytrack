@@ -22,6 +22,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { claimUpdateAtom, claimUpdateDrawerHandlerAtom } from "@/lib/atoms";
 import { useSetAtom } from "jotai";
 import type { Claim } from "@/lib/schema";
+import { AnimatePresence } from "framer-motion";
 
 interface DataTableProps<TValue> {
   columns: ColumnDef<Claim, TValue>[];
@@ -78,36 +79,38 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.original.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  onClick={() => {
-                    setClaimUpdate(row.original);
-                    setOpenDrawer(true);
-                  }}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
+            <AnimatePresence>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.original.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    onClick={() => {
+                      setClaimUpdate(row.original);
+                      setOpenDrawer(true);
+                    }}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
+              )}
+            </AnimatePresence>
           </TableBody>
           <TableFooter>
             {table.getFooterGroups().map((footerGroup) => (
