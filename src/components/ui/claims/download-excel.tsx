@@ -10,6 +10,7 @@ import { Sheet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { utils, write } from "xlsx";
 import toast from "react-hot-toast";
+import { formatCurrencyToRM } from "@/lib/utils";
 
 export function DownloadExcel({ data }: { data: Claim[] }) {
   function generateExcel() {
@@ -20,12 +21,14 @@ export function DownloadExcel({ data }: { data: Claim[] }) {
       );
 
       const dataWithTotal = [
-        ...data,
-        {
-          Item: "Total",
-          Amount: totalAmount,
-          Date: "",
-        },
+        ["Index", "Item", "Amount", "Date"],
+        ...data.map((claim, index) => [
+          index + 1,
+          claim.item,
+          formatCurrencyToRM(claim.amount),
+          claim.date.toLocaleDateString(),
+        ]),
+        ["", "Total", formatCurrencyToRM(totalAmount)],
       ];
 
       // current date in string
@@ -33,9 +36,7 @@ export function DownloadExcel({ data }: { data: Claim[] }) {
 
       const workbook = utils.book_new();
 
-      const worksheet = utils.json_to_sheet(dataWithTotal, {
-        header: ["Item", "Amount", "Date"],
-      });
+      const worksheet = utils.aoa_to_sheet(dataWithTotal);
 
       utils.book_append_sheet(workbook, worksheet, "Claims");
 
@@ -48,9 +49,11 @@ export function DownloadExcel({ data }: { data: Claim[] }) {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
 
+      console.log(dataWithTotal);
+
       const objectURL = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = "";
+      a.href = objectURL;
       a.download = `Claims-${date}.xlsx`;
       document.body.appendChild(a);
       a.click();

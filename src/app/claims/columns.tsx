@@ -7,6 +7,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Badge } from "@/components/ui/badge";
 import type { Claim } from "@/lib/schema";
 import { motion } from "framer-motion";
+import { formatCurrencyToRM } from "@/lib/utils";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -46,17 +47,9 @@ export const columns: ColumnDef<Claim>[] = [
     header: () => <div className="text-right">Amount</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "MYR",
-      }).format(amount);
-      const formattedWithCustomCurrency = formatted.replace("MYR", "RM");
+      const formatted = formatCurrencyToRM(amount);
 
-      return (
-        <div className={`text-right font-semibold`}>
-          {formattedWithCustomCurrency}
-        </div>
-      );
+      return <div className={`text-right font-semibold`}>{formatted}</div>;
     },
     footer: ({ table }) => {
       const filteredRows = table.getFilteredRowModel().rows;
@@ -66,12 +59,7 @@ export const columns: ColumnDef<Claim>[] = [
         total += parseFloat(row.getValue("amount"));
       });
 
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "MYR",
-      })
-        .format(total)
-        .replace("MYR", "RM");
+      const formatted = formatCurrencyToRM(total);
 
       return (
         <div className="text-right font-bold">

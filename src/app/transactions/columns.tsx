@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { type Category, getColorByCategory } from "@/lib/dicts";
+import { formatCurrencyToRM } from "@/lib/utils";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -56,15 +57,11 @@ export const columns: ColumnDef<Transaction>[] = [
     header: () => <div className="text-right">Amount</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "MYR",
-      }).format(amount);
-      const formattedWithCustomCurrency = formatted.replace("MYR", "RM");
+      const formatted = formatCurrencyToRM(amount);
 
       return (
         <div className="text-right font-semibold text-destructive">
-          -{formattedWithCustomCurrency}
+          -{formatted}
         </div>
       );
     },
@@ -76,12 +73,7 @@ export const columns: ColumnDef<Transaction>[] = [
         total += parseFloat(row.getValue("amount"));
       });
 
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "MYR",
-      })
-        .format(total)
-        .replace("MYR", "RM");
+      const formatted = formatCurrencyToRM(total);
 
       return (
         <div className="text-right font-bold">
