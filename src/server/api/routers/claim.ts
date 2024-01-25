@@ -23,7 +23,7 @@ export const claimRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        id: z.number(),
         item: z.string(),
         amount: z.number(),
         date: z.date(),

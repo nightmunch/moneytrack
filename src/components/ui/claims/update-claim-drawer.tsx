@@ -109,12 +109,23 @@ function UpdateClaimForm({
     },
   });
 
+  const updateClaim = api.claim.update.useMutation({
+    onSuccess: () => {
+      toast.success("Claim updated successfully. 🎉");
+      setOpen(false);
+      router.refresh();
+    },
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    toast.success("Claim updated successfully. 🎉");
-    setOpen(false);
+    if (values.id) {
+      updateClaim.mutate({
+        id: values.id,
+        item: values.item,
+        amount: values.amount,
+        date: values.date,
+      });
+    }
   }
 
   function onDelete(values: z.infer<typeof formSchema>) {
