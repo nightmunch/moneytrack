@@ -14,6 +14,7 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
 import { api } from "@/trpc/server";
+import { ClaimAllDialog } from "@/components/ui/claims/claim-all-dialog";
 
 async function getData(): Promise<Claim[] | null> {
   // Fetch data from your API here.
@@ -59,12 +60,12 @@ export default async function Claims() {
               <TooltipContent>Download to Excel</TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <Button variant={"outline"}>Claim All</Button>
+          <ClaimAllDialog />
           <NewClaimDrawer />
-          <UpdateClaimDrawer />
         </div>
         {data && <DataTable columns={columns} data={data} />}
       </ClientOnly>
+      <UpdateClaimDrawer />
     </div>
   );
 }

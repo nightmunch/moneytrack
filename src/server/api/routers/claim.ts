@@ -44,9 +44,15 @@ export const claimRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       await ctx.db.delete(claims).where(eq(claims.id, Number(input.id)));
     }),
-  getAll: publicProcedure.query(({ ctx }) => {
+  getAll: protectedProcedure.query(({ ctx }) => {
     return ctx.db.query.claims.findMany({
+      where: eq(claims.createdById, ctx.session.user.id),
       orderBy: (claims, { desc }) => [desc(claims.date)],
     });
+  }),
+  deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
+    await ctx.db
+      .delete(claims)
+      .where(eq(claims.createdById, ctx.session.user.id));
   }),
 });
