@@ -19,7 +19,7 @@
     --card: hsl(0, 0%, 100%);
     --card-foreground: hsl(222.2, 47.4%, 11.2%);
 
-    --primary: hsl(201, 65%, 58%);
+    --primary: hsl(156, 63%, 34%);
     --primary-foreground: hsl(210, 40%, 98%);
 
     --content: hsl(222.2, 47.4%, 11.2%);
@@ -37,7 +37,7 @@
 
     --radius: 0.5rem;
 
-    --badge-content: hsl(222.2, 47.4%, 11.2%);
+    --badge-content: hsl(152, 100%, 95%);
   }
 
   .dark {
