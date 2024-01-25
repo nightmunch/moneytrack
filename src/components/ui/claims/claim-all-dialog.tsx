@@ -1,11 +1,8 @@
 "use client";
-import { type Dispatch, type SetStateAction } from "react";
-import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -24,9 +21,8 @@ import {
 } from "@/components/ui/drawer";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { toast } from "react-hot-toast";
-import { claimFormSchema as formSchema } from "@/lib/schema";
-import { useAtom, useAtomValue } from "jotai";
-import { claimUpdateAtom, claimAllDialogHandlerAtom } from "@/lib/atoms";
+import { useAtom } from "jotai";
+import { claimAllDialogHandlerAtom } from "@/lib/atoms";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { AlertCircle } from "lucide-react";
