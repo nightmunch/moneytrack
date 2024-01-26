@@ -95,7 +95,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           )}
         </TableBody>
-        <TableFooter>
+        {/* <TableFooter>
           {table.getFooterGroups().map((footerGroup) => (
             <TableRow key={footerGroup.id}>
               {footerGroup.headers.map((header) => (
@@ -114,7 +114,7 @@ export function DataTable<TData, TValue>({
               ))}
             </TableRow>
           ))}
-        </TableFooter>
+        </TableFooter> */}
       </Table>
     </div>
   );
