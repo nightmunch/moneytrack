@@ -3,6 +3,7 @@ import { type Transaction, columns } from "./columns";
 import { DataTable } from "./data-table";
 import ClientOnly from "@/components/client-only";
 import { Skeleton } from "@/components/ui/skeleton";
+import { NewTransactionDrawer } from "@/components/ui/transactions/new-transaction-drawer";
 
 async function getData(): Promise<Transaction[]> {
   // Fetch data from your API here.
@@ -43,8 +44,11 @@ export default async function Transactions() {
           Here's the list of all your transactions.
         </h2>
       </div>
-      <MonthPicker />
       <ClientOnly LoadingComponent={<Loading />}>
+        <div className="flex gap-2">
+          <MonthPicker className="grow" />
+          <NewTransactionDrawer />
+        </div>
         <DataTable columns={columns} data={data} />
       </ClientOnly>
     </div>

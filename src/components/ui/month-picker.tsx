@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/popover";
 import { MonthCalendar } from "./month-calendar";
 
-export function MonthPicker() {
+export function MonthPicker({ className }: ButtonProps) {
   const [date, setDate] = React.useState<Date>();
 
   return (
@@ -24,6 +24,7 @@ export function MonthPicker() {
           className={cn(
             "justify-start text-left font-normal",
             !date && "text-muted-foreground",
+            className,
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
