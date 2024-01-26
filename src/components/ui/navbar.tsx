@@ -5,6 +5,15 @@ import { Sidebar } from "./sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { getServerAuthSession } from "@/server/auth";
 import Link from "next/link";
+// import { Popover, PopoverTrigger, PopoverContent } from "./popover";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "./dropdown-menu";
 
 export const Navbar = async () => {
   const session = await getServerAuthSession();
@@ -18,15 +27,27 @@ export const Navbar = async () => {
         >
           <ModeToggle />
         </ClientOnly>
-        {session?.user.image && (
-          <Avatar>
-            <AvatarImage src={session.user.image} />
-            <AvatarFallback>SA</AvatarFallback>
-          </Avatar>
-        )}
-        <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
-          {session ? "Sign out" : "Sign in"}
-        </Link>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Avatar>
+              {session?.user.image && <AvatarImage src={session.user.image} />}
+              <AvatarFallback>G</AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {session?.user && (
+              <>
+                <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+              </>
+            )}
+            <DropdownMenuItem asChild>
+              <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
+                {session ? "Sign out" : "Sign in"}
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );
