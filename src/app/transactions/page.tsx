@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { NewTransactionDrawer } from "@/components/ui/transactions/new-transaction-drawer";
 import { formatCurrencyToRM } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { NavigationTabs } from "@/components/ui/transactions/navigation-tabs";
 
 async function getData(): Promise<Transaction[]> {
   // Fetch data from your API here.
@@ -51,6 +52,10 @@ export default async function Transactions() {
           Here's the list of all your transactions.
         </h2>
       </div> */}
+      <div className="flex justify-center">
+        {/* <h1 className="text-center text-sm font-semibold text-primary">Main</h1> */}
+        <NavigationTabs className="w-[300px]" />
+      </div>
       <div className="flex flex-col gap-1">
         <h2 className="text-center text-sm text-muted-foreground">
           Expenses for the month
@@ -61,7 +66,7 @@ export default async function Transactions() {
       </div>
       <Separator />
       <div>
-        <h1 className="text-success text-center text-sm font-semibold">
+        <h1 className="text-center text-sm font-semibold text-success">
           Income: {formatCurrencyToRM(4400)}
         </h1>
         <h1 className="text-center text-sm font-semibold text-muted-foreground">
