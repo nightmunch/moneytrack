@@ -1,4 +1,5 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import type { Adapter } from "next-auth/adapters";
 import {
   getServerSession,
   type DefaultSession,
@@ -7,6 +8,7 @@ import {
 
 import { env } from "@/env";
 import { db } from "@/server/db";
+import { transactionGroups } from "@/server/db/schema";
 
 import GoogleProvider from "next-auth/providers/google";
 
@@ -38,15 +40,24 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: ({ session, user }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+        },
+      };
+    },
+    // ({
+    //   ...session,
+    //   user: {
+    //     ...session.user,
+    //     id: user.id,
+    //   },
+    // }),
   },
-  adapter: DrizzleAdapter(db),
+  adapter: DrizzleAdapter(db) as Adapter,
   providers: [
     // DiscordProvider({
     //   clientId: env.DISCORD_CLIENT_ID,
@@ -67,6 +78,15 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  events: {
+    createUser: async ({ user }) => {
+      // Create personal transaction group
+      await db.insert(transactionGroups).values({
+        name: "Personal",
+        createdById: user.id,
+      });
+    },
+  },
 };
 
 /**
