@@ -1,5 +1,6 @@
 import { MonthPicker } from "@/components/ui/month-picker";
-import { type Transaction, columns } from "./columns";
+import { columns } from "./columns";
+import type { Transaction } from "@/lib/schema";
 import { DataTable } from "./data-table";
 import ClientOnly from "@/components/client-only";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -7,42 +8,32 @@ import { NewTransactionDrawer } from "@/components/ui/transactions/new-transacti
 import { formatCurrencyToRM } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { NavigationTabs } from "@/components/ui/transactions/navigation-tabs";
+import { api } from "@/trpc/server";
 
-async function getData(): Promise<Transaction[]> {
+async function getData(): Promise<Transaction[] | null> {
   // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      item: "Woodfire Shah Alam",
-      amount: 100,
-      category: "Food",
-      date: new Date(),
-    },
-    {
-      id: "728ed52d",
-      item: "Petronas to Penang",
-      amount: 100,
-      category: "Petrol",
-      date: new Date(),
-    },
-    {
-      id: "728ed52e",
-      item: "My50",
-      amount: 100,
-      category: "Transportation",
-      date: new Date(),
-    },
-    // ...
-  ];
+  const transactionsQuery = await api.transaction.getAll.query();
+
+  if (transactionsQuery) {
+    const transactions = transactionsQuery.map((transaction) => ({
+      id: transaction.id,
+      item: transaction.item,
+      amount: transaction.amount,
+      category: transaction.category,
+      date: transaction.date,
+    }));
+    return transactions;
+  } else {
+    return null;
+  }
 }
 
 export default async function Transactions() {
   const data = await getData();
 
-  const totalExpenses = data.reduce(
-    (total, transaction) => total + transaction.amount,
-    0,
-  );
+  const totalExpenses = data
+    ? data.reduce((total, transaction) => total + transaction.amount, 0)
+    : 0;
 
   return (
     <div className="flex flex-col gap-4 px-10 py-8 sm:px-36">
@@ -74,11 +65,15 @@ export default async function Transactions() {
         </h1>
       </div>
       <ClientOnly LoadingComponent={<Loading />}>
-        <div className="flex gap-2">
-          <MonthPicker className="grow" />
-          <NewTransactionDrawer />
-        </div>
-        <DataTable columns={columns} data={data} />
+        {data && (
+          <>
+            <div className="flex gap-2">
+              <MonthPicker className="grow" />
+              <NewTransactionDrawer />
+            </div>
+            <DataTable columns={columns} data={data} />
+          </>
+        )}
       </ClientOnly>
     </div>
   );

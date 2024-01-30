@@ -20,7 +20,7 @@ export type Claim = z.infer<typeof claimFormSchema>;
 
 // Transaction Schema
 export const transactionFormSchema = z.object({
-  id: z.string().optional(),
+  id: z.number().optional(),
   item: z.string().min(2, {
     message: "Item name must be at least 2 characters",
   }),

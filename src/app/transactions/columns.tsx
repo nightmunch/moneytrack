@@ -8,15 +8,10 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { type Category, getColorByCategory } from "@/lib/dicts";
 import { formatCurrencyToRM } from "@/lib/utils";
 
+import type { Transaction } from "@/lib/schema";
+
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Transaction = {
-  id: string;
-  item: string;
-  amount: number;
-  category: Category;
-  date: Date;
-};
 
 export const columns: ColumnDef<Transaction>[] = [
   {
