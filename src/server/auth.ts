@@ -8,7 +8,7 @@ import {
 
 import { env } from "@/env";
 import { db } from "@/server/db";
-import { transactionGroups } from "@/server/db/schema";
+import { transactionGroupUsers, transactionGroups } from "@/server/db/schema";
 
 import GoogleProvider from "next-auth/providers/google";
 
@@ -81,10 +81,20 @@ export const authOptions: NextAuthOptions = {
   events: {
     createUser: async ({ user }) => {
       // Create personal transaction group
-      await db.insert(transactionGroups).values({
-        name: "Personal",
-        createdById: user.id,
-      });
+      const [transactionGroup] = await db
+        .insert(transactionGroups)
+        .values({
+          name: "Personal",
+          createdById: user.id,
+        })
+        .returning();
+      // Add in transactionGroupUsers
+      if (transactionGroup) {
+        await db.insert(transactionGroupUsers).values({
+          transactionGroupId: transactionGroup.id,
+          userId: user.id,
+        });
+      }
     },
   },
 };

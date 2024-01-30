@@ -1,5 +1,6 @@
 import { postRouter } from "@/server/api/routers/post";
 import { claimRouter } from "@/server/api/routers/claim";
+import { transactionRouter } from "@/server/api/routers/transaction";
 import { createTRPCRouter } from "@/server/api/trpc";
 
 /**
@@ -10,6 +11,7 @@ import { createTRPCRouter } from "@/server/api/trpc";
 export const appRouter = createTRPCRouter({
   post: postRouter,
   claim: claimRouter,
+  transaction: transactionRouter,
 });
 
 // export type definition of API

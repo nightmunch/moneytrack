@@ -60,7 +60,7 @@ export const transactionGroupsRelations = relations(
       fields: [transactionGroups.createdById],
       references: [users.id],
     }),
-    transactionGroupsUsers: many(transactionGroupUsers),
+    transactionGroupUsers: many(transactionGroupUsers),
   }),
 );
 
@@ -102,14 +102,10 @@ export const transactionGroupUsers = pgTable(
     userId: varchar("userId", { length: 255 })
       .notNull()
       .references(() => users.id),
-    createdById: varchar("createdById", { length: 255 }).notNull(),
   },
   (transactionGroupUser) => ({
     transactionGroupIdIdx: index("transactionGroupId_idx").on(
       transactionGroupUser.transactionGroupId,
-    ),
-    createdByIdIdx: index("createdById_idx").on(
-      transactionGroupUser.createdById,
     ),
     userIdIdx: index("userId_idx").on(transactionGroupUser.userId),
     compoundKey: primaryKey(
@@ -122,10 +118,6 @@ export const transactionGroupUsers = pgTable(
 export const transactionGroupUsersRelations = relations(
   transactionGroupUsers,
   ({ one }) => ({
-    createdById: one(users, {
-      fields: [transactionGroupUsers.createdById],
-      references: [users.id],
-    }),
     user: one(users, {
       fields: [transactionGroupUsers.userId],
       references: [users.id],
@@ -169,8 +161,7 @@ export const users = pgTable("user", {
   email: varchar("email", { length: 255 }).notNull(),
   emailVerified: timestamp("emailVerified", {
     mode: "date",
-    precision: 3,
-  }).default(sql`CURRENT_TIMESTAMP(3)`),
+  }),
   image: varchar("image", { length: 255 }),
 });
 

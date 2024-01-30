@@ -129,7 +129,7 @@ function AddClaimForm({
     },
   });
 
-  const createClaim = api.claim.create.useMutation({
+  const createTransaction = api.transaction.create.useMutation({
     onSuccess: async () => {
       toast.success("Claim added successfully. 🎉");
       setOpen(false);
@@ -138,7 +138,7 @@ function AddClaimForm({
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    createClaim.mutate(values);
+    createTransaction.mutate(values);
   }
   return (
     <Form {...form}>
@@ -202,7 +202,6 @@ function AddClaimForm({
                 <FormLabel>Category</FormLabel>
                 <FormControl>
                   <Select
-                    id="category"
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
