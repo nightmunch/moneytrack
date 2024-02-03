@@ -4,8 +4,10 @@ import {
   type ColumnDef,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   useReactTable,
   type VisibilityState,
+  type ColumnFiltersState,
 } from "@tanstack/react-table";
 
 import {
@@ -26,6 +28,9 @@ import {
 } from "@/lib/atoms";
 import { useSetAtom } from "jotai";
 import type { Transaction } from "@/lib/schema";
+import React from "react";
+import { MonthPicker } from "@/components/ui/month-picker";
+import { NewTransactionDrawer } from "@/components/ui/transactions/new-transaction-drawer";
 
 interface DataTableProps<TValue> {
   columns: ColumnDef<Transaction, TValue>[];
@@ -39,6 +44,10 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
     date: !isMobile,
   });
 
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+
   useEffect(() => {
     setColumnVisibility({
       category: !isMobile,
@@ -50,9 +59,12 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onColumnFiltersChange: setColumnFilters,
     state: {
       columnVisibility,
+      columnFilters,
     },
   });
 
@@ -60,62 +72,77 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
   const setOpenDrawer = useSetAtom(transactionUpdateDrawerHandlerAtom);
 
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          <AnimatePresence>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.original.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  onClick={() => {
-                    console.log("Open");
-                    setTransactionUpdate(row.original);
-                    setOpenDrawer(true);
-                  }}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
+    <>
+      <div className="flex gap-2">
+        <MonthPicker
+          className="grow"
+          date={table.getState().columnFilters[0]?.value as Date}
+          setDate={(date) => {
+            if (date) {
+              setColumnFilters([{ id: "date", value: date }]);
+            } else {
+              setColumnFilters([]);
+            }
+          }}
+        />
+        <NewTransactionDrawer />
+      </div>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </TableHead>
+                  );
+                })}
               </TableRow>
-            )}
-          </AnimatePresence>
-        </TableBody>
-        {/* <TableFooter>
+            ))}
+          </TableHeader>
+          <TableBody>
+            <AnimatePresence>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.original.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    onClick={() => {
+                      console.log("Open");
+                      setTransactionUpdate(row.original);
+                      setOpenDrawer(true);
+                    }}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </AnimatePresence>
+          </TableBody>
+          {/* <TableFooter>
           {table.getFooterGroups().map((footerGroup) => (
             <TableRow key={footerGroup.id}>
               {footerGroup.headers.map((header) => (
@@ -135,7 +162,8 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
             </TableRow>
           ))}
         </TableFooter> */}
-      </Table>
-    </div>
+        </Table>
+      </div>
+    </>
   );
 }

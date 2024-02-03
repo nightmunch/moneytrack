@@ -98,10 +98,6 @@ export default async function Transactions({
       <ClientOnly LoadingComponent={<Loading />}>
         {data && (
           <>
-            <div className="flex gap-2">
-              <MonthPicker className="grow" />
-              <NewTransactionDrawer />
-            </div>
             <DataTable columns={columns} data={data} />
           </>
         )}

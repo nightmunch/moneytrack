@@ -13,9 +13,15 @@ import {
 } from "@/components/ui/popover";
 import { MonthCalendar } from "./month-calendar";
 
-export function MonthPicker({ className }: ButtonProps) {
-  const [date, setDate] = React.useState<Date>();
-
+export function MonthPicker({
+  date,
+  setDate,
+  className,
+}: ButtonProps & {
+  date: Date | undefined;
+  setDate: (date: Date | undefined) => void;
+}) {
+  //   const [date, setDate] = React.useState<Date>();
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -28,7 +34,11 @@ export function MonthPicker({ className }: ButtonProps) {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "MMMM, yyyy") : <span>Pick a month</span>}
+          {date !== undefined ? (
+            format(date, "MMMM, yyyy")
+          ) : (
+            <span>Pick a month</span>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-2">

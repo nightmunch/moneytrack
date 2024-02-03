@@ -94,6 +94,12 @@ export const columns: ColumnDef<Transaction>[] = [
       const date = new Date(row.getValue("date"));
       return <div className="text-right">{format(date, "dd/MM/yyyy")}</div>;
     },
+    filterFn: (row, id, value) => {
+      // filter by month
+      const date = new Date(row.getValue("date"));
+      const month = date.getMonth();
+      return month === (value as Date).getMonth();
+    },
   },
 ];
 
