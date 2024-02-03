@@ -9,6 +9,7 @@ import { formatCurrencyToRM } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { NavigationTabs } from "@/components/ui/transactions/navigation-tabs";
 import { api } from "@/trpc/server";
+import { UpdateTransactionDrawer } from "@/components/ui/transactions/update-transaction-drawer";
 
 async function getData(): Promise<Transaction[] | null> {
   // Fetch data from your API here.
@@ -75,6 +76,7 @@ export default async function Transactions() {
           </>
         )}
       </ClientOnly>
+      <UpdateTransactionDrawer />
     </div>
   );
 }

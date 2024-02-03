@@ -19,16 +19,20 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { AnimatePresence } from "framer-motion";
+import {
+  transactionUpdateAtom,
+  transactionUpdateDrawerHandlerAtom,
+} from "@/lib/atoms";
+import { useSetAtom } from "jotai";
+import type { Transaction } from "@/lib/schema";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps<TValue> {
+  columns: ColumnDef<Transaction, TValue>[];
+  data: Transaction[];
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     category: !isMobile,
@@ -52,6 +56,9 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const setTransactionUpdate = useSetAtom(transactionUpdateAtom);
+  const setOpenDrawer = useSetAtom(transactionUpdateDrawerHandlerAtom);
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -74,26 +81,39 @@ export function DataTable<TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+          <AnimatePresence>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.original.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  onClick={() => {
+                    console.log("Open");
+                    setTransactionUpdate(row.original);
+                    setOpenDrawer(true);
+                  }}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
+            )}
+          </AnimatePresence>
         </TableBody>
         {/* <TableFooter>
           {table.getFooterGroups().map((footerGroup) => (

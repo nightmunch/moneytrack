@@ -35,18 +35,28 @@ import {
 } from "@/components/ui/form";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { toast } from "react-hot-toast";
-import { claimFormSchema as formSchema } from "@/lib/schema";
+import { transactionFormSchema as formSchema } from "@/lib/schema";
 import { useAtom, useAtomValue } from "jotai";
-import { claimUpdateAtom, claimUpdateDrawerHandlerAtom } from "@/lib/atoms";
+import {
+  transactionUpdateAtom,
+  transactionUpdateDrawerHandlerAtom,
+} from "@/lib/atoms";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export function UpdateClaimDrawer() {
-  const [open, setOpen] = useAtom(claimUpdateDrawerHandlerAtom);
+export function UpdateTransactionDrawer() {
+  const [open, setOpen] = useAtom(transactionUpdateDrawerHandlerAtom);
   const isMobile = useMediaQuery("(max-width: 640px)");
 
-  const title = "Update Claim";
-  const description = "Update a claim in your account.";
+  const title = "Update Transaction";
+  const description = "Update a transaction in your account.";
 
   if (!isMobile) {
     return (
@@ -58,7 +68,7 @@ export function UpdateClaimDrawer() {
               <DialogDescription>{description}</DialogDescription>
             </DialogHeader>
             <Separator />
-            <UpdateClaimForm setOpen={setOpen} />
+            <UpdateTransactionForm setOpen={setOpen} />
           </DialogContent>
         </Dialog>
       </TooltipProvider>
@@ -72,7 +82,7 @@ export function UpdateClaimDrawer() {
           <DrawerTitle className="text-primary">{title}</DrawerTitle>
           <DrawerDescription>{description}</DrawerDescription>
         </DrawerHeader>
-        <UpdateClaimForm className="px-4" setOpen={setOpen} />
+        <UpdateTransactionForm className="px-4" setOpen={setOpen} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -83,40 +93,42 @@ export function UpdateClaimDrawer() {
   );
 }
 
-function UpdateClaimForm({
+function UpdateTransactionForm({
   className,
   setOpen,
 }: {
+  className?: string;
   setOpen: Dispatch<SetStateAction<boolean>>;
-} & React.ComponentProps<"form">) {
+}) {
   const router = useRouter();
-  const claimUpdate = useAtomValue(claimUpdateAtom);
+  const transaction = useAtomValue(transactionUpdateAtom);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id: claimUpdate?.id ?? 0,
-      item: claimUpdate?.item ?? "",
-      amount: claimUpdate?.amount,
-      date: claimUpdate?.date ?? new Date(),
+      id: transaction?.id ?? 0,
+      item: transaction?.item ?? "",
+      amount: transaction?.amount ?? 0,
+      category: transaction?.category ?? "",
+      date: transaction?.date ?? new Date(),
     },
   });
 
-  const deleteClaim = api.claim.delete.useMutation({
+  const deleteTransaction = api.transaction.delete.useMutation({
     onSuccess: () => {
-      toast.success("Claim deleted successfully. 🎉");
-      setOpen(false);
+      toast.success("Transaction deleted successfully");
       router.refresh();
+      setOpen(false);
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
 
-  const updateClaim = api.claim.update.useMutation({
+  const updateTransaction = api.transaction.update.useMutation({
     onSuccess: () => {
-      toast.success("Claim updated successfully. 🎉");
-      setOpen(false);
+      toast.success("Transaction updated successfully");
       router.refresh();
+      setOpen(false);
     },
     onError: (error) => {
       toast.error(error.message);
@@ -125,10 +137,11 @@ function UpdateClaimForm({
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (values.id) {
-      updateClaim.mutate({
+      updateTransaction.mutate({
         id: values.id,
         item: values.item,
         amount: values.amount,
+        category: values.category,
         date: values.date,
       });
     }
@@ -136,12 +149,16 @@ function UpdateClaimForm({
 
   function onDelete(values: z.infer<typeof formSchema>) {
     if (values.id) {
-      deleteClaim.mutate({ id: values.id });
+      deleteTransaction.mutate({ id: values.id });
     }
   }
+
   return (
     <Form {...form}>
-      <form className={cn("grid items-start gap-4", className)}>
+      <form
+        className={cn("grid items-start gap-4", className)}
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <div className="grid gap-2">
           <FormField
             name="item"
@@ -177,11 +194,41 @@ function UpdateClaimForm({
                       id="amount"
                       placeholder="10.00"
                       {...field}
+                      value={field.value === 0 ? "" : field.value}
                       onChange={(event) =>
                         field.onChange(event.target.valueAsNumber)
                       }
                     />
                   </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="grid gap-2">
+          <FormField
+            name="category"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Food">Food</SelectItem>
+                      <SelectItem value="Transportation">
+                        Transportation
+                      </SelectItem>
+                      <SelectItem value="Petrol">Petrol</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -204,10 +251,10 @@ function UpdateClaimForm({
           />
         </div>
         <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
-          Update claim
+          Update transaction
         </Button>
         <Button variant="destructive" onClick={form.handleSubmit(onDelete)}>
-          Delete claim
+          Delete transaction
         </Button>
       </form>
     </Form>
