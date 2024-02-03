@@ -42,7 +42,7 @@ import {
   transactionUpdateDrawerHandlerAtom,
 } from "@/lib/atoms";
 import { api } from "@/trpc/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -101,6 +101,7 @@ function UpdateTransactionForm({
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const transaction = useAtomValue(transactionUpdateAtom);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -136,6 +137,7 @@ function UpdateTransactionForm({
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    const transactionGroupId = Number(pathname?.split("/")[2]);
     if (values.id) {
       updateTransaction.mutate({
         id: values.id,
@@ -143,6 +145,7 @@ function UpdateTransactionForm({
         amount: values.amount,
         category: values.category,
         date: values.date,
+        transactionGroupId,
       });
     }
   }

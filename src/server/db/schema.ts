@@ -76,6 +76,9 @@ export const transactions = pgTable(
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
+    transactionGroupId: bigserial("transactionGroupId", { mode: "number" })
+      .notNull()
+      .references(() => transactionGroups.id, { onDelete: "cascade" }),
   },
   (transaction) => ({
     createdByIdIdx: index("createdById_idx").on(transaction.createdById),
@@ -88,6 +91,10 @@ export const transactionRelations = relations(transactions, ({ one }) => ({
   createdById: one(users, {
     fields: [transactions.createdById],
     references: [users.id],
+  }),
+  transactionGroup: one(transactionGroups, {
+    fields: [transactions.transactionGroupId],
+    references: [transactionGroups.id],
   }),
 }));
 

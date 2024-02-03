@@ -11,9 +11,13 @@ import { NavigationTabs } from "@/components/ui/transactions/navigation-tabs";
 import { api } from "@/trpc/server";
 import { UpdateTransactionDrawer } from "@/components/ui/transactions/update-transaction-drawer";
 
-async function getData(): Promise<Transaction[] | null> {
+async function getData(
+  transactionGroupId: string,
+): Promise<Transaction[] | null> {
   // Fetch data from your API here.
-  const transactionsQuery = await api.transaction.getAll.query();
+  const transactionsQuery = await api.transaction.getAll.query({
+    transactionGroupId: Number(transactionGroupId),
+  });
 
   if (transactionsQuery) {
     const transactions = transactionsQuery.map((transaction) => ({
@@ -29,8 +33,12 @@ async function getData(): Promise<Transaction[] | null> {
   }
 }
 
-export default async function Transactions() {
-  const data = await getData();
+export default async function Transactions({
+  params,
+}: {
+  params: { transactionGroupId: string };
+}) {
+  const data = await getData(params.transactionGroupId);
 
   const totalExpenses = data
     ? data.reduce((total, transaction) => total + transaction.amount, 0)

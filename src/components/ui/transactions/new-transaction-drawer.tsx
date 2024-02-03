@@ -52,7 +52,7 @@ import {
 import { toast } from "react-hot-toast";
 import { transactionFormSchema as formSchema } from "@/lib/schema";
 import { api } from "@/trpc/react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export function NewTransactionDrawer() {
   const [open, setOpen] = useState(false);
@@ -119,6 +119,7 @@ function AddClaimForm({
   setOpen: Dispatch<SetStateAction<boolean>>;
 } & React.ComponentProps<"form">) {
   const router = useRouter();
+  const pathname = usePathname();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -135,10 +136,20 @@ function AddClaimForm({
       setOpen(false);
       router.refresh();
     },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    createTransaction.mutate(values);
+    const transactionGroupId = Number(pathname?.split("/")[2]);
+    createTransaction.mutate({
+      item: values.item,
+      amount: values.amount,
+      category: values.category,
+      date: values.date,
+      transactionGroupId,
+    });
   }
   return (
     <Form {...form}>

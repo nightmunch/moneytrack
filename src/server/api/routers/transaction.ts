@@ -11,6 +11,7 @@ export const transactionRouter = createTRPCRouter({
         amount: z.number(),
         category: z.string(),
         date: z.date(),
+        transactionGroupId: z.number(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -20,6 +21,7 @@ export const transactionRouter = createTRPCRouter({
         category: input.category,
         date: input.date,
         createdById: ctx.session.user.id,
+        transactionGroupId: input.transactionGroupId,
       });
     }),
   update: protectedProcedure
@@ -30,6 +32,7 @@ export const transactionRouter = createTRPCRouter({
         amount: z.number(),
         category: z.string(),
         date: z.date(),
+        transactionGroupId: z.number(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -40,6 +43,7 @@ export const transactionRouter = createTRPCRouter({
           amount: input.amount,
           category: input.category,
           date: input.date,
+          transactionGroupId: input.transactionGroupId,
         })
         .where(eq(transactions.id, Number(input.id)));
     }),
@@ -50,15 +54,22 @@ export const transactionRouter = createTRPCRouter({
         .delete(transactions)
         .where(eq(transactions.id, Number(input.id)));
     }),
-  getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.query.transactions.findMany({
-      where: eq(transactions.createdById, ctx.session.user.id),
-      orderBy: (transactions, { desc }) => [desc(transactions.date)],
-    });
-  }),
+  getAll: protectedProcedure
+    .input(
+      z.object({
+        transactionGroupId: z.number(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.query.transactions.findMany({
+        where: eq(transactions.transactionGroupId, input.transactionGroupId),
+        orderBy: (transactions, { desc }) => [desc(transactions.date)],
+      });
+    }),
   getAllByMonth: protectedProcedure
     .input(
       z.object({
+        transactionGroupId: z.number(),
         year: z.number(),
         month: z.number(),
       }),
