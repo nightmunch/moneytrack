@@ -13,10 +13,18 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PanelRight } from "lucide-react";
+import { api } from "@/trpc/react";
 
 export function Sidebar() {
+  const transactionGroupId =
+    api.transaction.getUserTransactionGroups.useQuery().data?.[0]?.id;
   const pages = [
-    { url: "/transactions", name: "Transactions" },
+    {
+      url: transactionGroupId
+        ? `/transactions/${transactionGroupId}`
+        : "/transactions",
+      name: "Transactions",
+    },
     { url: "/claims", name: "Claims" },
   ];
   const pathname = usePathname();
@@ -39,7 +47,9 @@ export function Sidebar() {
           {pages.map((page) => (
             <SheetClose asChild key={page.url}>
               <Button
-                variant={`${pathname === page.url ? "default" : "outline"}`}
+                variant={`${
+                  pathname.includes(page.url) ? "default" : "outline"
+                }`}
                 className="justify-start"
                 asChild
               >

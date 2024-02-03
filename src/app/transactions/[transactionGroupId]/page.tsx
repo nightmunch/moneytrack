@@ -19,7 +19,7 @@ async function getData(
     transactionGroupId: Number(transactionGroupId),
   });
 
-  if (transactionsQuery) {
+  if (transactionsQuery.length > 0) {
     const transactions = transactionsQuery.map((transaction) => ({
       id: transaction.id,
       item: transaction.item,
@@ -38,6 +38,21 @@ export default async function Transactions({
 }: {
   params: { transactionGroupId: string };
 }) {
+  const transactionGroups =
+    await api.transaction.getUserTransactionGroups.query();
+
+  const userHaveAccessToTransactionGroup =
+    transactionGroups.filter(
+      (group) => group.id === Number(params.transactionGroupId),
+    ).length > 0;
+
+  if (!userHaveAccessToTransactionGroup) {
+    return (
+      <h1 className="px-10 py-8 text-center text-xl font-semibold text-primary">
+        Unauthorized Access!
+      </h1>
+    );
+  }
   const data = await getData(params.transactionGroupId);
 
   const totalExpenses = data

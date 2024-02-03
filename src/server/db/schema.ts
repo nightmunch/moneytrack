@@ -9,6 +9,7 @@ import {
   integer,
   bigserial,
   doublePrecision,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
@@ -46,6 +47,7 @@ export const transactionGroups = pgTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     income: doublePrecision("income").notNull().default(0.0),
+    editable: boolean("editable").notNull().default(false),
   },
   (transactionGroup) => ({
     createdByIdIdx: index("createdById_idx").on(transactionGroup.createdById),
