@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { transactions, transactionGroups } from "@/server/db/schema";
+import { transactions, transactionGroupUsers } from "@/server/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { and, eq } from "drizzle-orm";
 
@@ -64,6 +64,9 @@ export const transactionRouter = createTRPCRouter({
       return ctx.db.query.transactions.findMany({
         where: eq(transactions.transactionGroupId, input.transactionGroupId),
         orderBy: (transactions, { desc }) => [desc(transactions.date)],
+        with: {
+          createdById: true,
+        },
       });
     }),
   getAllByMonth: protectedProcedure
@@ -84,11 +87,11 @@ export const transactionRouter = createTRPCRouter({
       });
     }),
   getUserTransactionGroups: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.query.transactionGroups.findMany({
-      where: and(
-        eq(transactionGroups.createdById, ctx.session.user.id),
-        eq(transactionGroups.editable, false),
-      ),
+    return ctx.db.query.transactionGroupUsers.findMany({
+      with: {
+        transactionGroup: true,
+      },
+      where: eq(transactionGroupUsers.userId, ctx.session.user.id),
     });
   }),
 });

@@ -23,6 +23,11 @@ async function getData(transactionGroupId: string): Promise<Transaction[]> {
     amount: transaction.amount,
     category: transaction.category,
     date: transaction.date,
+    createdBy: {
+      id: transaction.createdById.id,
+      name: transaction.createdById.name,
+      image: transaction.createdById.image,
+    },
   }));
   return transactions;
 }
@@ -37,12 +42,12 @@ export default async function Transactions({
 
   const userHaveAccessToTransactionGroup =
     transactionGroups.filter(
-      (group) => group.id === Number(params.transactionGroupId),
+      (group) => group.transactionGroupId === Number(params.transactionGroupId),
     ).length > 0;
 
   const currentTransactionGroup = transactionGroups.find(
-    (group) => group.id === Number(params.transactionGroupId),
-  );
+    (group) => group.transactionGroupId === Number(params.transactionGroupId),
+  )?.transactionGroup;
 
   if (!userHaveAccessToTransactionGroup) {
     return (

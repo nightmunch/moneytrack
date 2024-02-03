@@ -49,7 +49,11 @@ export const columns: ColumnDef<Claim>[] = [
       const amount = parseFloat(row.getValue("amount"));
       const formatted = formatCurrencyToRM(amount);
 
-      return <div className={`text-right font-semibold`}>{formatted}</div>;
+      return (
+        <div className={`text-nowrap text-right font-semibold`}>
+          {formatted}
+        </div>
+      );
     },
     footer: ({ table }) => {
       const filteredRows = table.getFilteredRowModel().rows;

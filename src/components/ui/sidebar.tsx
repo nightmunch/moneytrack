@@ -16,16 +16,20 @@ import { PanelRight } from "lucide-react";
 import { api } from "@/trpc/react";
 
 export function Sidebar() {
-  const transactionGroupId =
-    api.transaction.getUserTransactionGroups.useQuery().data?.[0]?.id;
+  const transactionGroups =
+    api.transaction.getUserTransactionGroups.useQuery().data;
+  const onlyNonEditable = transactionGroups?.find(
+    ({ transactionGroup }) => transactionGroup.editable === false,
+  );
   const pages = [
     {
-      url: transactionGroupId
-        ? `/transactions/${transactionGroupId}`
+      url: onlyNonEditable
+        ? `/transactions/${onlyNonEditable.transactionGroupId}`
         : "/transactions",
+      highlight: "/transactions",
       name: "Transactions",
     },
-    { url: "/claims", name: "Claims" },
+    { url: "/claims", highlight: "/claims", name: "Claims" },
   ];
   const pathname = usePathname();
   return (
@@ -48,7 +52,7 @@ export function Sidebar() {
             <SheetClose asChild key={page.url}>
               <Button
                 variant={`${
-                  pathname.includes(page.url) ? "default" : "outline"
+                  pathname.includes(page.highlight) ? "default" : "outline"
                 }`}
                 className="justify-start"
                 asChild

@@ -11,6 +11,7 @@ import { formatCurrencyToRM } from "@/lib/utils";
 import type { Transaction } from "@/lib/schema";
 
 import { motion } from "framer-motion";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -65,7 +66,7 @@ export const columns: ColumnDef<Transaction>[] = [
       const formatted = formatCurrencyToRM(amount);
 
       return (
-        <div className="text-right font-semibold text-destructive">
+        <div className="text-nowrap text-right font-semibold text-destructive">
           -{formatted}
         </div>
       );
@@ -99,6 +100,22 @@ export const columns: ColumnDef<Transaction>[] = [
       const date = new Date(row.getValue("date"));
       const month = date.getMonth();
       return month === (value as Date).getMonth();
+    },
+  },
+  {
+    accessorKey: "createdBy",
+    header: () => <div className="text-center">Created By</div>,
+    cell: ({ row }) => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      const user = row.getValue("createdBy") as { name: string; image: string };
+      return (
+        <div className="flex flex-col items-center">
+          <Avatar className="sm:h-[1.5rem] sm:w-[1.5rem]">
+            <AvatarImage src={user.image} alt={user.name} />
+            <AvatarFallback>{user.name[0]}</AvatarFallback>
+          </Avatar>
+        </div>
+      );
     },
   },
 ];

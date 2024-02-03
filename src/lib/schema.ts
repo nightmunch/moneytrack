@@ -36,6 +36,13 @@ export const transactionFormSchema = z.object({
     invalid_type_error: "Date must be a valid date",
     required_error: "Date is required",
   }),
+  createdBy: z
+    .object({
+      id: z.string(),
+      name: z.string().nullable(),
+      image: z.string().nullable(),
+    })
+    .optional(),
 });
 
 export type Transaction = z.infer<typeof transactionFormSchema>;
