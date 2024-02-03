@@ -11,26 +11,20 @@ import { NavigationTabs } from "@/components/ui/transactions/navigation-tabs";
 import { api } from "@/trpc/server";
 import { UpdateTransactionDrawer } from "@/components/ui/transactions/update-transaction-drawer";
 
-async function getData(
-  transactionGroupId: string,
-): Promise<Transaction[] | null> {
+async function getData(transactionGroupId: string): Promise<Transaction[]> {
   // Fetch data from your API here.
   const transactionsQuery = await api.transaction.getAll.query({
     transactionGroupId: Number(transactionGroupId),
   });
 
-  if (transactionsQuery.length > 0) {
-    const transactions = transactionsQuery.map((transaction) => ({
-      id: transaction.id,
-      item: transaction.item,
-      amount: transaction.amount,
-      category: transaction.category,
-      date: transaction.date,
-    }));
-    return transactions;
-  } else {
-    return null;
-  }
+  const transactions = transactionsQuery.map((transaction) => ({
+    id: transaction.id,
+    item: transaction.item,
+    amount: transaction.amount,
+    category: transaction.category,
+    date: transaction.date,
+  }));
+  return transactions;
 }
 
 export default async function Transactions({
@@ -96,11 +90,7 @@ export default async function Transactions({
         </h1>
       </div>
       <ClientOnly LoadingComponent={<Loading />}>
-        {data && (
-          <>
-            <DataTable columns={columns} data={data} />
-          </>
-        )}
+        {data && <DataTable columns={columns} data={data} />}
       </ClientOnly>
       <UpdateTransactionDrawer />
     </div>

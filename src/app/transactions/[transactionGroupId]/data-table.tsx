@@ -76,7 +76,12 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
       <div className="flex gap-2">
         <MonthPicker
           className="grow"
-          date={table.getState().columnFilters[0]?.value as Date}
+          disabled={data.length === 0}
+          date={
+            data.length === 0
+              ? undefined
+              : (table.getState().columnFilters[0]?.value as Date)
+          }
           setDate={(date) => {
             if (date) {
               setColumnFilters([{ id: "date", value: date }]);

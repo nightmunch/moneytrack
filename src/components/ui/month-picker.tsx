@@ -17,6 +17,7 @@ export function MonthPicker({
   date,
   setDate,
   className,
+  ...props
 }: ButtonProps & {
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
@@ -32,6 +33,7 @@ export function MonthPicker({
             !date && "text-muted-foreground",
             className,
           )}
+          {...props}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {date !== undefined ? (
