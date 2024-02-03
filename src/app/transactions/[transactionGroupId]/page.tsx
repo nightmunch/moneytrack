@@ -46,6 +46,10 @@ export default async function Transactions({
       (group) => group.id === Number(params.transactionGroupId),
     ).length > 0;
 
+  const currentTransactionGroup = transactionGroups.find(
+    (group) => group.id === Number(params.transactionGroupId),
+  );
+
   if (!userHaveAccessToTransactionGroup) {
     return (
       <h1 className="px-10 py-8 text-center text-xl font-semibold text-primary">
@@ -82,10 +86,13 @@ export default async function Transactions({
       <Separator />
       <div>
         <h1 className="text-center text-sm font-semibold text-success">
-          Income: {formatCurrencyToRM(4400)}
+          Income: {formatCurrencyToRM(currentTransactionGroup?.income ?? 0)}
         </h1>
         <h1 className="text-center text-sm font-semibold text-muted-foreground">
-          Balance: {formatCurrencyToRM(4400 - totalExpenses)}
+          Balance:{" "}
+          {formatCurrencyToRM(
+            (currentTransactionGroup?.income ?? 0) - totalExpenses,
+          )}
         </h1>
       </div>
       <ClientOnly LoadingComponent={<Loading />}>
