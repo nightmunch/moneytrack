@@ -31,6 +31,7 @@ import type { Transaction } from "@/lib/schema";
 import React from "react";
 import { MonthPicker } from "@/components/ui/month-picker";
 import { NewTransactionDrawer } from "@/components/ui/transactions/new-transaction-drawer";
+import { transactionMonthAtom } from "@/lib/atoms";
 
 interface DataTableProps<TValue> {
   columns: ColumnDef<Transaction, TValue>[];
@@ -70,6 +71,7 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
 
   const setTransactionUpdate = useSetAtom(transactionUpdateAtom);
   const setOpenDrawer = useSetAtom(transactionUpdateDrawerHandlerAtom);
+  const setMonth = useSetAtom(transactionMonthAtom);
 
   return (
     <>
@@ -85,8 +87,10 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
           setDate={(date) => {
             if (date) {
               setColumnFilters([{ id: "date", value: date }]);
+              setMonth(date);
             } else {
               setColumnFilters([]);
+              setMonth(null);
             }
           }}
         />
