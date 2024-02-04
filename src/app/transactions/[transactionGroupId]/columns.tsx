@@ -104,13 +104,13 @@ export const columns: ColumnDef<Transaction>[] = [
   },
   {
     accessorKey: "createdBy",
-    header: () => <div className="text-center">Created By</div>,
+    header: () => <div className="text-center"></div>,
     cell: ({ row }) => {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       const user = row.getValue("createdBy") as { name: string; image: string };
       return (
         <div className="flex flex-col items-center">
-          <Avatar className="sm:h-[1.5rem] sm:w-[1.5rem]">
+          <Avatar className="h-[1.25rem] w-[1.25rem] sm:h-[1.5rem] sm:w-[1.5rem]">
             <AvatarImage src={user.image} alt={user.name} />
             <AvatarFallback>{user.name[0]}</AvatarFallback>
           </Avatar>

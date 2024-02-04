@@ -58,6 +58,9 @@ export function ClientTransactions({
     : data.reduce((total, curr) => total + curr.amount, 0);
   return (
     <div className="flex flex-col gap-4 px-10 py-8 sm:px-36">
+      <h1 className="text-center text-xl font-semibold">
+        {currentTransactionGroup?.name}
+      </h1>
       <div className="flex justify-center">
         <NavigationTabs className="w-[300px]" />
       </div>
