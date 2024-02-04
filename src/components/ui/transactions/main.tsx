@@ -24,11 +24,7 @@ export function ClientTransactions({
 
   const month = useAtomValue(transactionMonthAtom);
   if (!transactionGroups) {
-    return (
-      <h1 className="px-10 py-8 text-center text-xl font-semibold text-primary">
-        Unauthorized Access!
-      </h1>
-    );
+    return null;
   }
 
   const userHaveAccessToTransactionGroup =
