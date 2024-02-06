@@ -62,24 +62,29 @@ export function ClientTransactions({
       </div>
       <div className="flex flex-col gap-1">
         <h2 className="text-center text-sm text-muted-foreground">
-          Expenses for the month
+          {month ? "Expenses for the month" : "Total Expenses"}
         </h2>
         <h1 className="text-center text-2xl font-semibold text-destructive">
           {formatCurrencyToRM(totalExpensesByMonthOrAll)}
         </h1>
       </div>
-      <Separator />
-      <div>
-        <h1 className="text-center text-sm font-semibold text-success">
-          Income: {formatCurrencyToRM(currentTransactionGroup?.income ?? 0)}
-        </h1>
-        <h1 className="text-center text-sm font-semibold text-muted-foreground">
-          Balance:{" "}
-          {formatCurrencyToRM(
-            (currentTransactionGroup?.income ?? 0) - totalExpensesByMonthOrAll,
-          )}
-        </h1>
-      </div>
+      {month && (
+        <>
+          <Separator />
+          <div>
+            <h1 className="text-center text-sm font-semibold text-success">
+              Income: {formatCurrencyToRM(currentTransactionGroup?.income ?? 0)}
+            </h1>
+            <h1 className="text-center text-sm font-semibold text-muted-foreground">
+              Balance:{" "}
+              {formatCurrencyToRM(
+                (currentTransactionGroup?.income ?? 0) -
+                  totalExpensesByMonthOrAll,
+              )}
+            </h1>
+          </div>
+        </>
+      )}
       <ClientOnly LoadingComponent={<Loading />}>
         {data && <DataTable columns={columns} data={data} />}
       </ClientOnly>

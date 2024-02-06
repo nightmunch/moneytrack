@@ -45,9 +45,12 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
     date: !isMobile,
   });
 
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([
+    {
+      id: "date",
+      value: new Date(),
+    },
+  ]);
 
   useEffect(() => {
     setColumnVisibility({
