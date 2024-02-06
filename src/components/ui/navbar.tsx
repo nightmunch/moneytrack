@@ -14,6 +14,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "./dropdown-menu";
+import { Button } from "./button";
 
 export const Navbar = async () => {
   const session = await getServerAuthSession();
@@ -23,7 +24,11 @@ export const Navbar = async () => {
       <p className="text-lg font-semibold text-content">Money Track</p>
       <div className="flex gap-2">
         <ClientOnly
-          LoadingComponent={<Sun className="h-[1.2rem] w-[1.2rem]" />}
+          LoadingComponent={
+            <Button variant="outline" size="icon">
+              <Sun className="h-[1.2rem] w-[1.2rem]" />
+            </Button>
+          }
         >
           <ModeToggle />
         </ClientOnly>

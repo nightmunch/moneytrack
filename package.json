@@ -46,6 +46,7 @@
     "next-themes": "^0.2.1",
     "postgres": "^3.4.3",
     "react": "18.2.0",
+    "react-charts": "3.0.0-beta.57",
     "react-day-picker": "^8.9.1",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.49.3",
