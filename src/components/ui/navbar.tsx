@@ -31,7 +31,9 @@ export const Navbar = async () => {
           <DropdownMenuTrigger>
             <Avatar>
               {session?.user.image && <AvatarImage src={session.user.image} />}
-              <AvatarFallback>G</AvatarFallback>
+              <AvatarFallback>
+                {session?.user.name ? session.user.name[0] : "G"}
+              </AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
