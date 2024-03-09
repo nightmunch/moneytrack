@@ -43,6 +43,7 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     category: !isMobile,
     date: !isMobile,
+    createdBy: false,
   });
 
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([
@@ -56,6 +57,7 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
     setColumnVisibility({
       category: !isMobile,
       date: !isMobile,
+      createdBy: false,
     });
   }, [isMobile]);
 

@@ -24,6 +24,8 @@ export const columns: ColumnDef<Transaction>[] = [
       const isMobile = useMediaQuery("(max-width: 640px)");
       const category = row.getValue("category");
       const date = new Date(row.getValue("date"));
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      const user = row.getValue("createdBy") as { name: string; image: string };
 
       return (
         <motion.div
@@ -35,7 +37,15 @@ export const columns: ColumnDef<Transaction>[] = [
           }}
           className="flex flex-col gap-1"
         >
-          <div>{row.getValue("item")}</div>
+          <div className="flex items-center gap-2">
+            <span>{row.getValue("item")}</span>
+            {user && (
+              <Avatar className="inline-block h-[1.25rem] w-[1.25rem]">
+                <AvatarImage src={user.image} alt={user.name} />
+                <AvatarFallback>{user.name[0]}</AvatarFallback>
+              </Avatar>
+            )}
+          </div>
           {isMobile && (
             <>
               <div>
