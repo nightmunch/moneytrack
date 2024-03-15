@@ -18,19 +18,17 @@ import { api } from "@/trpc/react";
 export function Sidebar() {
   const transactionGroups =
     api.transaction.getUserTransactionGroups.useQuery().data;
-  const onlyNonEditable = transactionGroups?.find(
-    ({ transactionGroup }) => transactionGroup.editable === false,
-  );
-  const pages = [
-    {
-      url: onlyNonEditable
-        ? `/transactions/${onlyNonEditable.transactionGroupId}`
-        : "/transactions",
-      highlight: "/transactions",
-      name: "Transactions",
-    },
-    { url: "/claims", highlight: "/claims", name: "Claims" },
+  const transactionPages = [
+    ...(transactionGroups
+      ? transactionGroups.map(({ transactionGroup }) => ({
+          url: `/transactions/${transactionGroup.id}`,
+          highlight: `/transactions/${transactionGroup.id}`,
+          name: transactionGroup.name,
+        }))
+      : []),
   ];
+
+  const claimPages = [{ url: "/claims", highlight: "/claims", name: "Claims" }];
   const pathname = usePathname();
   return (
     <Sheet>
@@ -48,7 +46,23 @@ export function Sidebar() {
         </SheetHeader>
         <Separator className="my-4" />
         <div className="grid gap-2">
-          {pages.map((page) => (
+          <h2 className="text-sm text-primary">Transactions</h2>
+          {transactionPages.map((page) => (
+            <SheetClose asChild key={page.url}>
+              <Button
+                variant={`${
+                  pathname.includes(page.highlight) ? "default" : "outline"
+                }`}
+                className="justify-start"
+                asChild
+              >
+                <Link href={page.url}>{page.name}</Link>
+              </Button>
+            </SheetClose>
+          ))}
+          <Separator className="my-3" />
+          <h2 className="text-sm text-primary">Claims</h2>
+          {claimPages.map((page) => (
             <SheetClose asChild key={page.url}>
               <Button
                 variant={`${
