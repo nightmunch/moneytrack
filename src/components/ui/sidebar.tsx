@@ -29,7 +29,9 @@ export function Sidebar() {
   ];
 
   const claimPages = [{ url: "/claims", highlight: "/claims", name: "Claims" }];
-  const pathname = usePathname();
+  const netWorthPages = [
+    { url: "/net-worth", highlight: "/net-worth", name: "Net Worth" },
+  ];
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -47,36 +49,34 @@ export function Sidebar() {
         <Separator className="my-4" />
         <div className="grid gap-2">
           <h2 className="text-sm text-primary">Transactions</h2>
-          {transactionPages.map((page) => (
-            <SheetClose asChild key={page.url}>
-              <Button
-                variant={`${
-                  pathname.includes(page.highlight) ? "default" : "outline"
-                }`}
-                className="justify-start"
-                asChild
-              >
-                <Link href={page.url}>{page.name}</Link>
-              </Button>
-            </SheetClose>
-          ))}
+          <PageButton pages={transactionPages} />
           <Separator className="my-3" />
           <h2 className="text-sm text-primary">Claims</h2>
-          {claimPages.map((page) => (
-            <SheetClose asChild key={page.url}>
-              <Button
-                variant={`${
-                  pathname.includes(page.highlight) ? "default" : "outline"
-                }`}
-                className="justify-start"
-                asChild
-              >
-                <Link href={page.url}>{page.name}</Link>
-              </Button>
-            </SheetClose>
-          ))}
+          <PageButton pages={claimPages} />
+          <Separator className="my-3" />
+          <h2 className="text-sm text-primary">Net Worth</h2>
+          <PageButton pages={netWorthPages} />
         </div>
       </SheetContent>
     </Sheet>
   );
+}
+
+function PageButton({
+  pages,
+}: {
+  pages: { url: string; highlight: string; name: string | null }[];
+}) {
+  const pathname = usePathname();
+  return pages.map((page) => (
+    <SheetClose asChild key={page.url}>
+      <Button
+        variant={pathname.includes(page.highlight) ? "default" : "outline"}
+        className="justify-start"
+        asChild
+      >
+        <Link href={page.url}>{page.name}</Link>
+      </Button>
+    </SheetClose>
+  ));
 }
