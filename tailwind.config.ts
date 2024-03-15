@@ -9,7 +9,15 @@ module.exports = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
-  safelist: ["bg-[#58c551]", "bg-[#f5a623]", "bg-[#24cced]"],
+  safelist: [
+    "bg-[#8fb4ff]",
+    "bg-[#f089a1]",
+    "bg-[#9ff089]",
+    "bg-[#ffb061]",
+    "bg-[#ffeb91]",
+    "bg-[#d5abff]",
+    "bg-[#dae6e5]",
+  ],
   theme: {
     container: {
       center: true,

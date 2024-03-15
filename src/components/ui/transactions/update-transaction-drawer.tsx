@@ -50,6 +50,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { categories } from "@/lib/dicts";
 
 export function UpdateTransactionDrawer() {
   const [open, setOpen] = useAtom(transactionUpdateDrawerHandlerAtom);
@@ -225,11 +226,11 @@ function UpdateTransactionForm({
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Food">Food</SelectItem>
-                      <SelectItem value="Transportation">
-                        Transportation
-                      </SelectItem>
-                      <SelectItem value="Petrol">Petrol</SelectItem>
+                      {categories.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormControl>

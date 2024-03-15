@@ -135,7 +135,7 @@ const CategoryBadge = ({ category }: { category: Category }) => {
     <Badge
       className={`bg-[${getColorByCategory(
         category,
-      )}] px-1 py-0 text-badgecontent`}
+      )}] px-1 py-0 font-normal text-badgecontent`}
     >
       {category}
     </Badge>
