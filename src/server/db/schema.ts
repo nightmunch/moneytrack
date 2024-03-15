@@ -164,6 +164,34 @@ export const claimsRelations = relations(claims, ({ one }) => ({
   }),
 }));
 
+export const netWorths = pgTable(
+  "netWorth",
+  {
+    id: bigserial("id", { mode: "number" }).notNull().primaryKey(),
+    item: varchar("item", { length: 256 }).notNull(),
+    remarks: varchar("remarks", { length: 256 }),
+    amount: doublePrecision("amount").notNull(),
+    currency: varchar("currency", { length: 256 }).notNull(),
+    category: varchar("category", { length: 256 }).notNull(),
+    liquidity: varchar("liquidity", { length: 256 }).notNull(),
+    createdById: varchar("createdById", { length: 255 }).notNull(),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (netWorth) => ({
+    createdByIdIdx: index("createdById_idx").on(netWorth.createdById),
+    nameIndex: index("name_idx").on(netWorth.item),
+  }),
+);
+
+export const netWorthsRelations = relations(netWorths, ({ one }) => ({
+  createdById: one(users, {
+    fields: [netWorths.createdById],
+    references: [users.id],
+  }),
+}));
+
 export const users = pgTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),

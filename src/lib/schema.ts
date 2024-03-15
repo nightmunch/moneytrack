@@ -46,3 +46,30 @@ export const transactionFormSchema = z.object({
 });
 
 export type Transaction = z.infer<typeof transactionFormSchema>;
+
+// Net Worth Schema
+export const netWorthFormSchema = z.object({
+  id: z.number().optional(),
+  item: z.string().min(2, {
+    message: "Item name must be at least 2 characters",
+  }),
+  remarks: z.string().optional(),
+  amount: z.number({
+    invalid_type_error: "Amount must be a number",
+    required_error: "Amount is required",
+  }),
+  currency: z.string({
+    invalid_type_error: "Currency must be a string",
+    required_error: "Currency is required",
+  }),
+  category: z.string({
+    invalid_type_error: "Category must be a string",
+    required_error: "Category is required",
+  }),
+  liquidity: z.string({
+    invalid_type_error: "Liquidity must be a string",
+    required_error: "Liquidity is required",
+  }),
+});
+
+export type NetWorth = z.infer<typeof netWorthFormSchema>;
