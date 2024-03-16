@@ -7,7 +7,7 @@ import {
 } from "@/server/api/trpc";
 
 import { netWorths } from "@/server/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, asc, desc } from "drizzle-orm";
 
 import { env } from "@/env";
 
@@ -60,7 +60,7 @@ export const netWorthRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ ctx }) => {
     return ctx.db.query.netWorths.findMany({
       where: eq(netWorths.createdById, ctx.session.user.id),
-      orderBy: (netWorths, { desc }) => desc(netWorths.category),
+      orderBy: [desc(netWorths.category), asc(netWorths.id)],
     });
   }),
   getCryptoPriceInMYR: publicProcedure
