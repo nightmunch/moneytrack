@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import type { Transaction } from "@/lib/schema";
 import { api } from "@/trpc/server";
 import { ClientTransactions } from "@/components/ui/transactions/main";

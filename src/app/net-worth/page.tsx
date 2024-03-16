@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { NewNetWorthDrawer } from "@/components/ui/net-worth/new-net-worth-drawer";

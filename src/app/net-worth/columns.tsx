@@ -10,10 +10,9 @@ import { formatCurrencyToRM } from "@/lib/utils";
 import {
   getColorByNetWorthCategory,
   getColorByNetWorthLiquidity,
-  netWorthCategory,
-  netWorthLiquidity,
+  type netWorthCategory,
+  type netWorthLiquidity,
 } from "@/lib/dicts";
-import { api } from "@/trpc/react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.

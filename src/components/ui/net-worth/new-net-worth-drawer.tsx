@@ -24,7 +24,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { Separator } from "../separator";
-import { DatePicker } from "../date-picker";
 import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

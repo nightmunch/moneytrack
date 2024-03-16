@@ -22,7 +22,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
-import { Badge, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Separator } from "../separator";
 import { DatePicker } from "../date-picker";
 import { type z } from "zod";
@@ -53,7 +53,7 @@ import { toast } from "react-hot-toast";
 import { transactionFormSchema as formSchema } from "@/lib/schema";
 import { api } from "@/trpc/react";
 import { useRouter, usePathname } from "next/navigation";
-import { Category, categories, getColorByCategory } from "@/lib/dicts";
+import { categories } from "@/lib/dicts";
 
 export function NewTransactionDrawer() {
   const [open, setOpen] = useState(false);

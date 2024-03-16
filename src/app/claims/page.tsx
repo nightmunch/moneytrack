@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { columns } from "./columns";
 import type { Claim } from "@/lib/schema";
 import { DataTable } from "./data-table";
