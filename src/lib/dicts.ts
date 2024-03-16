@@ -42,9 +42,9 @@ export const netWorthCategories = netWorthCategoryToColor.map(
 export const netWorthCurrencies = ["RM", "ETH"];
 // Liquidity
 const netWorthLiquidityToColor = [
-  { liquidity: "Low", color: "#9ff089" },
+  { liquidity: "Low", color: "#f089a1" },
   { liquidity: "Medium", color: "#ffeb91" },
-  { liquidity: "High", color: "#f089a1" },
+  { liquidity: "High", color: "#9ff089" },
 ] as const;
 
 export type netWorthLiquidity =
