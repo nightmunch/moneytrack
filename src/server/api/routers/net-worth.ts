@@ -60,7 +60,7 @@ export const netWorthRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ ctx }) => {
     return ctx.db.query.netWorths.findMany({
       where: eq(netWorths.createdById, ctx.session.user.id),
-      orderBy: (netWorths, { desc }) => desc(netWorths.id),
+      orderBy: (netWorths, { desc }) => desc(netWorths.category),
     });
   }),
   getCryptoPriceInMYR: publicProcedure
