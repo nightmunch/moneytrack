@@ -26,7 +26,7 @@ import {
   transactionUpdateAtom,
   transactionUpdateDrawerHandlerAtom,
 } from "@/lib/atoms";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import type { Transaction } from "@/lib/schema";
 import React from "react";
 import { MonthPicker } from "@/components/ui/month-picker";
@@ -75,7 +75,20 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
 
   const setTransactionUpdate = useSetAtom(transactionUpdateAtom);
   const setOpenDrawer = useSetAtom(transactionUpdateDrawerHandlerAtom);
-  const setSelectedMonthYear = useSetAtom(transactionSelectedMonthYearAtom);
+  const [selectedMonthYear, setSelectedMonthYear] = useAtom(
+    transactionSelectedMonthYearAtom,
+  );
+
+  useEffect(() => {
+    if (selectedMonthYear) {
+      setColumnFilters([
+        {
+          id: "date",
+          value: selectedMonthYear,
+        },
+      ]);
+    }
+  }, []);
 
   return (
     <>
@@ -86,7 +99,8 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
           date={
             data.length === 0
               ? undefined
-              : (table.getState().columnFilters[0]?.value as Date)
+              : selectedMonthYear ??
+                (table.getState().columnFilters[0]?.value as Date)
           }
           setDate={(date) => {
             if (date) {
