@@ -9,7 +9,7 @@ export const claimAllDialogHandlerAtom = atom<boolean>(false);
 // Transactions
 export const transactionUpdateAtom = atom<Transaction | null>(null);
 export const transactionUpdateDrawerHandlerAtom = atom<boolean>(false);
-export const transactionMonthAtom = atom<Date | null>(new Date());
+export const transactionSelectedMonthYearAtom = atom<Date | null>(new Date());
 
 // Net Worth
 export const netWorthUpdateAtom = atom<NetWorth | null>(null);

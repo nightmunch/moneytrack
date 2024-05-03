@@ -1,7 +1,7 @@
 "use client";
 import { DataTable } from "@/app/transactions/[transactionGroupId]/data-table";
 import ClientOnly from "@/components/client-only";
-import { transactionMonthAtom } from "@/lib/atoms";
+import { transactionSelectedMonthYearAtom } from "@/lib/atoms";
 import { formatCurrencyToRM } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { useAtomValue } from "jotai";
@@ -22,7 +22,7 @@ export function ClientTransactions({
   const transactionGroups =
     api.transaction.getUserTransactionGroups.useQuery().data;
 
-  const month = useAtomValue(transactionMonthAtom);
+  const selectedMonthYear = useAtomValue(transactionSelectedMonthYearAtom);
   if (!transactionGroups) {
     return null;
   }
@@ -44,9 +44,12 @@ export function ClientTransactions({
     (group) => group.transactionGroupId === Number(transactionGroupId),
   )?.transactionGroup;
 
-  const totalExpensesByMonthOrAll = month
+  const totalExpensesByMonthOrAll = selectedMonthYear
     ? data.reduce((total, curr) => {
-        if (new Date(curr.date).getMonth() === month?.getMonth()) {
+        if (
+          new Date(curr.date).getMonth() === selectedMonthYear?.getMonth() &&
+          new Date(curr.date).getFullYear() === selectedMonthYear?.getFullYear()
+        ) {
           total += curr.amount;
         }
         return total;
@@ -62,13 +65,13 @@ export function ClientTransactions({
       </div>
       <div className="flex flex-col gap-1">
         <h2 className="text-center text-sm text-muted-foreground">
-          {month ? "Expenses for the month" : "Total Expenses"}
+          {selectedMonthYear ? "Expenses for the month" : "Total Expenses"}
         </h2>
         <h1 className="text-center text-2xl font-semibold text-destructive">
           {formatCurrencyToRM(totalExpensesByMonthOrAll)}
         </h1>
       </div>
-      {month && (
+      {selectedMonthYear && (
         <>
           <Separator />
           <div>

@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { AnimatePresence } from "framer-motion";
 import {
+  transactionSelectedMonthYearAtom,
   transactionUpdateAtom,
   transactionUpdateDrawerHandlerAtom,
 } from "@/lib/atoms";
@@ -30,7 +31,6 @@ import type { Transaction } from "@/lib/schema";
 import React from "react";
 import { MonthPicker } from "@/components/ui/month-picker";
 import { NewTransactionDrawer } from "@/components/ui/transactions/new-transaction-drawer";
-import { transactionMonthAtom } from "@/lib/atoms";
 
 interface DataTableProps<TValue> {
   columns: ColumnDef<Transaction, TValue>[];
@@ -75,7 +75,7 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
 
   const setTransactionUpdate = useSetAtom(transactionUpdateAtom);
   const setOpenDrawer = useSetAtom(transactionUpdateDrawerHandlerAtom);
-  const setMonth = useSetAtom(transactionMonthAtom);
+  const setSelectedMonthYear = useSetAtom(transactionSelectedMonthYearAtom);
 
   return (
     <>
@@ -91,10 +91,10 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
           setDate={(date) => {
             if (date) {
               setColumnFilters([{ id: "date", value: date }]);
-              setMonth(date);
+              setSelectedMonthYear(date);
             } else {
               setColumnFilters([]);
-              setMonth(null);
+              setSelectedMonthYear(null);
             }
           }}
         />
