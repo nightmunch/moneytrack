@@ -106,10 +106,13 @@ export const columns: ColumnDef<Transaction>[] = [
       return <div className="text-right">{format(date, "dd/MM/yyyy")}</div>;
     },
     filterFn: (row, id, value) => {
-      // filter by month
+      // filter by month and year
       const date = new Date(row.getValue("date"));
-      const month = date.getMonth();
-      return month === (value as Date).getMonth();
+      const filterDate = new Date(value as Date);
+      return (
+        date.getMonth() === filterDate.getMonth() &&
+        date.getFullYear() === filterDate.getFullYear()
+      );
     },
   },
   {
