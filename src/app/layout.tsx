@@ -34,9 +34,7 @@ export default function RootLayout({
             <NavigationBar className="mx-auto mt-5 bg-white shadow-sm p-1 rounded-lg" />
         </FloatingNav>
         <NavigationBar className="fixed top-1 sm:inset-x-64 inset-x-10 mx-auto z-[5000] mt-5 bg-white shadow-sm p-1 rounded-lg" />
-        <div>
         {children}
-        </div>
       </body>
     </html>
   );
